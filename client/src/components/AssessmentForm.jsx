@@ -149,7 +149,7 @@ export default function AssessmentForm({ onSubmit, onCancel, loading }) {
   return (
     <div className="container">
       <div className="header">
-        <h1>Mental Health Assessment</h1>
+        <h1>Mental Health Assessment:</h1>
         <p>Patient: {patientData.name} (Age: {patientData.age})</p>
       </div>
 
