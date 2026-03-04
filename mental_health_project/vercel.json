@@ -1,0 +1,27 @@
+{
+  "buildCommand": "pip install -r requirements.txt && python manage.py collectstatic --noinput",
+  "outputDirectory": "staticfiles",
+  "framework": "django",
+  "env": {
+    "DJANGO_SETTINGS_MODULE": "mental_health_project.settings"
+  },
+  "functions": {
+    "wsgi.py": {
+      "memory": 1024,
+      "maxDuration": 30
+    }
+  },
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "headers": {
+        "Cache-Control": "public, max-age=3600"
+      },
+      "destination": "/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "destination": "mental_health_project.wsgi"
+    }
+  ]
+}
