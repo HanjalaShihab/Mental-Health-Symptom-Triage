@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Self-Harm Follow-up Assessment{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="alert alert-warning" role="alert">
+            <strong>⚠️ Important Follow-up Question:</strong>
+            <p class="mb-0">
+                You indicated that you have thoughts of self-harm. This follow-up question will help us 
+                determine the urgency of care you may need.
+            </p>
+        </div>
+
+        <form method="post" class="needs-validation">
+            {% csrf_token %}
+            
+            <div class="card mb-4 border-danger">
+                <div class="card-body">
+                    <div class="form-check p-3 bg-light rounded">
+                        {{ form.self_harm_plan }}
+                        <label class="form-check-label ms-2" for="{{ form.self_harm_plan.id_for_label }}">
+                            <strong>{{ form.self_harm_plan.label }}</strong>
+                            {% if form.self_harm_plan.help_text %}
+                                <br><small class="text-muted">{{ form.self_harm_plan.help_text }}</small>
+                            {% endif %}
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>ℹ️ If you are in crisis:</strong>
+                <ul class="mb-0 mt-2">
+                    <li>Call emergency services immediately (999/112)</li>
+                    <li>Go to your nearest hospital emergency room</li>
+                    <li>Call a suicide prevention hotline</li>
+                </ul>
+            </div>
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-danger btn-lg">Get Assessment Results</button>
+                <a href="{% url 'assessment' %}" class="btn btn-outline-secondary">Back to Assessment</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            var forms = document.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+        }, false);
+    }());
+</script>
+{% endblock %}

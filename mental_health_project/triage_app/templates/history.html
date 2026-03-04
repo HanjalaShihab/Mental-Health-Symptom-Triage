@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+
+{% block title %}Assessment History{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="mb-5">
+    <h1 class="display-5 fw-bold mb-3">
+        <i class="fas fa-history"></i> Your Assessment History
+    </h1>
+    <p class="lead text-muted">
+        Track your progress and view all your previous assessments
+    </p>
+</div>
+
+<div class="row mb-5">
+    <div class="col-lg-10 mx-auto">
+        <!-- Filter Card -->
+        <div class="card border-0 mb-5">
+            <div class="card-header" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%); border: none;">
+                <h5 class="mb-0" style="color: var(--text-color);">
+                    <i class="fas fa-filter" style="color: var(--primary-color);"></i> Filter Results
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="get" class="row g-3 align-items-end">
+                    <div class="col-md-9">
+                        <label for="severity" class="form-label fw-500">Filter by Severity Level:</label>
+                        <select name="severity" id="severity" class="form-select form-select-lg rounded-3">
+                            <option value="">Show All Severities</option>
+                            {% for value, label in severity_choices %}
+                            <option value="{{ value }}" {% if request.GET.severity == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary btn-lg w-100" style="border-radius: 10px;">
+                            <i class="fas fa-search"></i> Filter
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {% if assessments %}
+        <!-- Assessment Cards/Table -->
+        <div class="row g-4 mb-5">
+            {% for assessment in assessments %}
+            <div class="col-lg-6">
+                <a href="{% url 'results' assessment.id %}" class="card border-0 h-100 text-decoration-none" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.95) 100%); box-shadow: 0 8px 24px rgba(102, 126, 234, 0.1); transition: all 0.3s ease; cursor: pointer;">
+                    <!-- Colored top border based on severity -->
+                    <div style="height: 4px; background: {% if assessment.severity == 'Crisis' %}linear-gradient(90deg, #dc3545, #c82333){% elif assessment.severity == 'Severe' %}linear-gradient(90deg, #fd7e14, #e86c00){% elif assessment.severity == 'Moderate' %}linear-gradient(90deg, #ffc107, #e0a800){% elif assessment.severity == 'Mild' %}linear-gradient(90deg, #17a2b8, #138496){% else %}linear-gradient(90deg, #28a745, #20c997){% endif %};"></div>
+                    
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h6 class="text-muted mb-1">
+                                    <i class="fas fa-calendar-alt"></i> Assessment Date
+                                </h6>
+                                <h5 class="fw-bold mb-0">{{ assessment.created_at|date:"M d, Y" }}</h5>
+                                <small class="text-muted">{{ assessment.created_at|date:"H:i A" }}</small>
+                            </div>
+                            <div>
+                                <span class="badge {% if assessment.severity == 'Crisis' %}bg-danger{% elif assessment.severity == 'Severe' %}bg-warning{% elif assessment.severity == 'Moderate' %}bg-warning{% elif assessment.severity == 'Mild' %}bg-info{% else %}bg-success{% endif %}" style="font-size: 0.9rem; padding: 0.6rem 1rem; border-radius: 8px;">
+                                    {{ assessment.get_severity_display }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Stats Row -->
+                        <div class="row text-center g-3 py-3" style="border-top: 1px solid rgba(0,0,0,0.1); border-bottom: 1px solid rgba(0,0,0,0.1);">
+                            <div class="col-4">
+                                <div style="font-size: 1.3rem; color: var(--primary-color); font-weight: bold;">
+                                    {{ assessment.get_symptom_count }}/20
+                                </div>
+                                <small class="text-muted">Symptoms</small>
+                            </div>
+                            <div class="col-4">
+                                <div style="font-size: 1.3rem; color: var(--secondary-color); font-weight: bold;">
+                                    {% if assessment.prediction_method == 'ml' %}
+                                        <i class="fas fa-brain"></i>
+                                    {% else %}
+                                        <i class="fas fa-cogs"></i>
+                                    {% endif %}
+                                </div>
+                                <small class="text-muted">
+                                    {% if assessment.prediction_method == 'ml' %}ML{% else %}Rules{% endif %}
+                                </small>
+                            </div>
+                            <div class="col-4">
+                                <div style="font-size: 1.3rem; color: var(--success-color); font-weight: bold;">
+                                    {% if assessment.ml_confidence %}{{ assessment.ml_confidence|floatformat:0 }}%{% else %}—{% endif %}
+                                </div>
+                                <small class="text-muted">Confidence</small>
+                            </div>
+                        </div>
+
+                        <!-- View Details Button -->
+                        <div class="mt-3 text-center">
+                            <span class="btn btn-sm btn-outline-primary">
+                                View Details <i class="fas fa-arrow-right ms-2"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if assessments.has_previous or assessments.has_next %}
+        <nav class="mb-5">
+            <ul class="pagination justify-content-center">
+                {% if assessments.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">
+                        <i class="fas fa-chevron-left"></i> First
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ assessments.previous_page_number }}">
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link"><i class="fas fa-chevron-left"></i> First</span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link"><i class="fas fa-chevron-left"></i> Previous</span>
+                </li>
+                {% endif %}
+
+                <!-- Page Numbers -->
+                {% for num in assessments.paginator.page_range %}
+                    {% if assessments.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                    {% elif num > assessments.number|add:'-3' and num < assessments.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if assessments.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ assessments.next_page_number }}">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ assessments.paginator.num_pages }}">
+                        Last <i class="fas fa-chevron-right"></i>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">Next <i class="fas fa-chevron-right"></i></span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">Last <i class="fas fa-chevron-right"></i></span>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+
+        {% else %}
+        <!-- Empty State -->
+        <div class="card border-0 p-5 text-center" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);">
+            <div style="font-size: 4rem; color: var(--primary-color); margin-bottom: 1rem; opacity: 0.5;">
+                <i class="fas fa-inbox"></i>
+            </div>
+            <h4 class="fw-bold mb-3" style="color: var(--text-color);">No Assessments Yet</h4>
+            <p class="text-muted mb-4">
+                You haven't completed any assessments yet. Start your first assessment to begin tracking your mental health.
+            </p>
+            <a href="{% url 'assessment' %}" class="btn btn-lg" style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); color: white; border: none; border-radius: 10px;">
+                <i class="fas fa-plus-circle"></i> Start Your First Assessment
+            </a>
+        </div>
+        {% endif %}
+
+        <!-- Back Button -->
+        <div class="mt-5 text-center">
+            <a href="{% url 'index' %}" class="btn btn-outline-secondary btn-lg px-5">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

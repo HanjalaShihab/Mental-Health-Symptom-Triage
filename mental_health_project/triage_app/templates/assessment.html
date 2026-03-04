@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+
+{% block title %}Mental Health Assessment{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="mb-5">
+    <h1 class="display-5 fw-bold mb-3">
+        <i class="fas fa-heart-pulse"></i> Mental Health Assessment
+    </h1>
+    <p class="lead text-muted">
+        A comprehensive evaluation based on WHO mhGAP guidelines. This typically takes 5-10 minutes.
+    </p>
+</div>
+
+<!-- Important Alert -->
+<div class="alert alert-info border-0 mb-4" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); border-left: 4px solid var(--primary-color);">
+    <div class="d-flex align-items-start gap-3">
+        <i class="fas fa-info-circle fs-5" style="color: var(--primary-color); flex-shrink: 0; margin-top: 0.25rem;"></i>
+        <div>
+            <strong>📋 Please Answer Honestly</strong>
+            <p class="mb-0 small mt-1">Your responses are completely confidential. This assessment is designed to help you understand your mental health better. It's not a diagnosis.</p>
+        </div>
+    </div>
+</div>
+
+<form method="post" class="needs-validation" novalidate>
+    {% csrf_token %}
+    
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <!-- Mood & Emotion Section -->
+            <div class="card mb-4 border-0">
+                <div class="card-header" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%); border: none;">
+                    <h5 class="mb-0" style="color: var(--text-color);">
+                        <i class="fas fa-face-smile" style="color: var(--primary-color);"></i> Mood & Emotions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% for field in form %}
+                        {% if field.name in 'sadness,loss_interest,worthlessness,hopelessness,irritability,mood_swings' %}
+                            <div class="form-check mb-3 p-3 rounded" style="background: rgba(102, 126, 234, 0.03); border-left: 3px solid var(--primary-color);">
+                                <div class="d-flex gap-3">
+                                    {{ field }}
+                                    <div class="flex-grow-1">
+                                        <label class="form-check-label fw-500" for="{{ field.id_for_label }}">
+                                            {{ field.label }}
+                                        </label>
+                                        {% if field.help_text %}
+                                            <p class="small text-muted mb-0 mt-1">{{ field.help_text|safe }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Sleep & Energy Section -->
+            <div class="card mb-4 border-0">
+                <div class="card-header" style="background: linear-gradient(135deg, rgba(240, 147, 251, 0.15) 0%, rgba(102, 126, 234, 0.15) 100%); border: none;">
+                    <h5 class="mb-0" style="color: var(--text-color);">
+                        <i class="fas fa-moon" style="color: var(--secondary-color);"></i> Sleep & Energy
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% for field in form %}
+                        {% if field.name in 'sleep_issues,appetite_changes,fatigue' %}
+                            <div class="form-check mb-3 p-3 rounded" style="background: rgba(118, 75, 162, 0.03); border-left: 3px solid var(--secondary-color);">
+                                <div class="d-flex gap-3">
+                                    {{ field }}
+                                    <div class="flex-grow-1">
+                                        <label class="form-check-label fw-500" for="{{ field.id_for_label }}">
+                                            {{ field.label }}
+                                        </label>
+                                        {% if field.help_text %}
+                                            <p class="small text-muted mb-0 mt-1">{{ field.help_text|safe }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Anxiety Section -->
+            <div class="card mb-4 border-0">
+                <div class="card-header" style="background: linear-gradient(135deg, rgba(38, 208, 206, 0.15) 0%, rgba(102, 126, 234, 0.15) 100%); border: none;">
+                    <h5 class="mb-0" style="color: var(--text-color);">
+                        <i class="fas fa-bolt" style="color: var(--success-color);"></i> Anxiety & Worry
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% for field in form %}
+                        {% if field.name in 'anxiety,panic,worry,concentration_issues' %}
+                            <div class="form-check mb-3 p-3 rounded" style="background: rgba(38, 208, 206, 0.03); border-left: 3px solid var(--success-color);">
+                                <div class="d-flex gap-3">
+                                    {{ field }}
+                                    <div class="flex-grow-1">
+                                        <label class="form-check-label fw-500" for="{{ field.id_for_label }}">
+                                            {{ field.label }}
+                                        </label>
+                                        {% if field.help_text %}
+                                            <p class="small text-muted mb-0 mt-1">{{ field.help_text|safe }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Physical & Behavioral Section -->
+            <div class="card mb-4 border-0">
+                <div class="card-header" style="background: linear-gradient(135deg, rgba(247, 183, 49, 0.15) 0%, rgba(240, 147, 251, 0.15) 100%); border: none;">
+                    <h5 class="mb-0" style="color: var(--text-color);">
+                        <i class="fas fa-dumbbell" style="color: var(--warning-color);"></i> Physical & Behavioral
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% for field in form %}
+                        {% if field.name in 'physical_pain,substance_use,reckless_behavior' %}
+                            <div class="form-check mb-3 p-3 rounded" style="background: rgba(247, 183, 49, 0.03); border-left: 3px solid var(--warning-color);">
+                                <div class="d-flex gap-3">
+                                    {{ field }}
+                                    <div class="flex-grow-1">
+                                        <label class="form-check-label fw-500" for="{{ field.id_for_label }}">
+                                            {{ field.label }}
+                                        </label>
+                                        {% if field.help_text %}
+                                            <p class="small text-muted mb-0 mt-1">{{ field.help_text|safe }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Safety & Self-Harm Section (Critical) -->
+            <div class="card mb-5 border-0" style="border-top: 3px solid var(--danger-color) !important;">
+                <div class="card-header" style="background: linear-gradient(135deg, rgba(238, 90, 111, 0.15) 0%, rgba(102, 126, 234, 0.1) 100%); border: none;">
+                    <h5 class="mb-0" style="color: var(--text-color);">
+                        <i class="fas fa-exclamation-triangle" style="color: var(--danger-color);"></i> Safety & Well-Being
+                    </h5>
+                    <small class="text-danger">⚠️ Your responses here are important for your safety</small>
+                </div>
+                <div class="card-body">
+                    {% for field in form %}
+                        {% if field.name in 'self_harm_thoughts,self_harm_behavior,suicide_thoughts' %}
+                            <div class="form-check mb-3 p-3 rounded" style="background: rgba(238, 90, 111, 0.03); border-left: 3px solid var(--danger-color);">
+                                <div class="d-flex gap-3">
+                                    {{ field }}
+                                    <div class="flex-grow-1">
+                                        <label class="form-check-label fw-500" for="{{ field.id_for_label }}">
+                                            {{ field.label }}
+                                        </label>
+                                        {% if field.help_text %}
+                                            <p class="small text-danger mb-0 mt-1"><strong>{{ field.help_text|safe }}</strong></p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Submit Buttons -->
+            <div class="d-grid gap-3 d-sm-flex justify-content-center mb-4">
+                <button type="submit" class="btn btn-primary btn-lg" style="min-width: 200px;">
+                    <i class="fas fa-check-circle"></i> Complete Assessment
+                </button>
+                <a href="{% url 'index' %}" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-times-circle"></i> Cancel
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
+
+<style>
+    .fw-500 {
+        font-weight: 500;
+    }
+</style>
+
+<script>
+    // Form validation
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            var forms = document.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+        }, false);
+    }());
+</script>
+{% endblock %}

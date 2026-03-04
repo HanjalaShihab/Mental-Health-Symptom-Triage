@@ -1,0 +1,256 @@
+{% extends 'base.html' %}
+
+{% block title %}Assessment Results{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="mb-5">
+    <h1 class="display-5 fw-bold mb-3">
+        <i class="fas fa-chart-bar"></i> Your Assessment Results
+    </h1>
+    <p class="lead text-muted">
+        Completed on {{ assessment.created_at|date:"F d, Y \a\t g:i A" }}
+    </p>
+</div>
+
+<div class="row">
+    <div class="col-lg-10 mx-auto">
+        <!-- Main Results Card - Eye Catching -->
+        <div class="card border-0 mb-5" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); border-top: 5px solid var(--primary-color);">
+            <div class="card-body p-5 text-center">
+                <div style="font-size: 6rem; margin-bottom: 1.5rem; animation: floatUp 3s ease-in-out infinite;">
+                    {{ severity_details.icon }}
+                </div>
+                <h2 class="mb-3" style="font-size: 3rem; font-weight: 800; color: var(--text-color);">
+                    {{ severity_details.name }}
+                </h2>
+                <p class="fs-5 text-muted">
+                    Based on your responses to the WHO mhGAP assessment questionnaire
+                </p>
+            </div>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="row mb-5 g-3">
+            <div class="col-md-4">
+                <div class="card border-0 text-center p-4">
+                    <div style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 0.5rem;">
+                        <i class="fas fa-list-check"></i>
+                    </div>
+                    <h6 class="text-muted">Symptoms Reported</h6>
+                    <h3 class="fw-bold text-primary">{{ symptom_count }}/20</h3>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 text-center p-4">
+                    <div style="font-size: 2.5rem; color: var(--secondary-color); margin-bottom: 0.5rem;">
+                        {% if assessment.severity == 'Crisis' %}
+                            <i class="fas fa-exclamation-triangle"></i>
+                        {% elif assessment.severity == 'Severe' %}
+                            <i class="fas fa-bolt"></i>
+                        {% elif assessment.severity == 'Moderate' %}
+                            <i class="fas fa-minus-circle"></i>
+                        {% elif assessment.severity == 'Mild' %}
+                            <i class="fas fa-info-circle"></i>
+                        {% else %}
+                            <i class="fas fa-check-circle"></i>
+                        {% endif %}
+                    </div>
+                    <h6 class="text-muted">Severity Level</h6>
+                    <h3 class="fw-bold" style="color: var(--secondary-color);">{{ assessment.get_severity_display }}</h3>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 text-center p-4">
+                    <div style="font-size: 2.5rem; color: var(--success-color); margin-bottom: 0.5rem;">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h6 class="text-muted">Assessment Method</h6>
+                    <h3 class="fw-bold" style="color: var(--success-color);">
+                        {{ assessment.get_prediction_method_display|default:"Evidence-Based" }}
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Summary -->
+        <div class="card border-0 mb-5">
+            <div class="card-header" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%); border: none;">
+                <h5 class="mb-0" style="color: var(--text-color);">
+                    <i class="fas fa-info-circle" style="color: var(--primary-color);"></i> Assessment Summary
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="ps-3" style="border-left: 3px solid var(--primary-color);">
+                            <strong>Assessment Date</strong><br>
+                            <span class="text-muted">{{ assessment.created_at|date:"F d, Y \a\t g:i A" }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="ps-3" style="border-left: 3px solid var(--secondary-color);">
+                            <strong>Severity Classification</strong><br>
+                            <span class="badge {% if assessment.severity == 'Crisis' %}bg-danger{% elif assessment.severity == 'Severe' %}bg-danger{% elif assessment.severity == 'Moderate' %}bg-warning{% elif assessment.severity == 'Mild' %}bg-info{% else %}bg-success{% endif %}" style="font-size: 1rem; padding: 0.5rem 1rem;">
+                                {{ assessment.get_severity_display }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                {% if assessment.ml_confidence %}
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="ps-3" style="border-left: 3px solid var(--success-color);">
+                            <strong>Prediction Confidence</strong><br>
+                            <span class="text-muted">{{ assessment.ml_confidence|floatformat:1 }}%</span>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="card border-0 mb-5">
+            <div class="card-header" style="background: linear-gradient(135deg, rgba(38, 208, 206, 0.15) 0%, rgba(102, 126, 234, 0.15) 100%); border: none;">
+                <h5 class="mb-0" style="color: var(--text-color);">
+                    <i class="fas fa-lightbulb" style="color: var(--success-color);"></i> Recommendations
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    {% for advice in severity_details.advice %}
+                    <div class="list-group-item border-0 px-0 py-3 d-flex align-items-start gap-3">
+                        <div style="font-size: 1.5rem; color: var(--success-color); flex-shrink: 0;">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <p class="mb-0 text-muted">{{ advice }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Resources -->
+        {% if severity_details.resources %}
+        <div class="card border-0 mb-5">
+            <div class="card-header" style="background: linear-gradient(135deg, rgba(247, 183, 49, 0.15) 0%, rgba(240, 147, 251, 0.15) 100%); border: none;">
+                <h5 class="mb-0" style="color: var(--text-color);">
+                    <i class="fas fa-book" style="color: var(--warning-color);"></i> Helpful Resources
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    {% for resource in severity_details.resources %}
+                    <a href="{{ resource.url }}" target="_blank" class="list-group-item list-group-item-action px-0 py-3 border-0 d-flex align-items-center gap-3">
+                        <div style="font-size: 1.5rem; color: var(--warning-color); flex-shrink: 0;">
+                            <i class="fas fa-external-link-alt"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">{{ resource.name }}</h6>
+                            <p class="mb-0 small text-muted">{{ resource.description }}</p>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Crisis Information Banner (if applicable) -->
+        {% if assessment.severity == 'Crisis' or assessment.severity == 'Severe' %}
+        <div class="alert alert-danger border-0 p-4 mb-5" style="background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(184, 21, 35, 0.1) 100%); border-left: 5px solid #dc3545;">
+            <div class="d-flex align-items-start gap-3">
+                <div style="font-size: 1.8rem; color: #dc3545; flex-shrink: 0;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div>
+                    <h5 class="alert-heading" style="color: var(--text-color);">Important: Please Seek Professional Support</h5>
+                    <p class="mb-2">
+                        Your assessment indicates symptoms that may require professional mental health support. We strongly encourage you to:
+                    </p>
+                    <ul class="mb-0">
+                        <li>Contact a mental health professional immediately</li>
+                        <li>Call the National Suicide Prevention Lifeline: <strong>988</strong> (US)</li>
+                        <li>Text "HELLO" to 741741 (Crisis Text Line)</li>
+                        <li>Go to your nearest emergency room if you are in immediate danger</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Action Buttons -->
+        <div class="d-grid gap-3 d-sm-flex justify-content-center mb-5">
+            <a href="{% url 'assessment' %}" class="btn btn-primary btn-lg px-5">
+                <i class="fas fa-redo-alt"></i> Retake Assessment
+            </a>
+            <a href="{% url 'history' %}" class="btn btn-outline-primary btn-lg px-5">
+                <i class="fas fa-history"></i> View History
+            </a>
+            <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-lg px-5">
+                <i class="fas fa-home"></i> Back Home
+            </a>
+        </div>
+
+        <!-- Additional Information Card -->
+        <div class="card border-0 mb-5" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);">
+            <div class="card-body p-4">
+                <h6 class="text-muted mb-3">
+                    <i class="fas fa-info-circle"></i> About This Assessment
+                </h6>
+                <p class="small text-muted mb-2">
+                    This assessment uses the <strong>WHO mhGAP (Mental Health Gap Action Programme)</strong> questionnaire, 
+                    an evidence-based tool used by mental health professionals worldwide to screen for common mental health conditions.
+                </p>
+                <p class="small text-muted">
+                    <strong>Note:</strong> This assessment is not a substitute for professional medical diagnosis. 
+                    The results are intended to provide guidance and encourage you to seek professional support if needed.
+                    Please consult with a qualified mental health professional for a proper diagnosis and treatment plan.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+                    <li class="list-group-item">📞 {{ resource }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Disclaimer -->
+        <div class="alert alert-warning mb-4">
+            <strong>⚠️ Important Disclaimer:</strong>
+            <p class="mb-0">
+                This assessment provides preliminary mental health screening based on WHO mhGAP guidelines 
+                and is <strong>NOT a substitute for professional mental health assessment or diagnosis</strong>. 
+                It cannot diagnose conditions or replace care from qualified mental health professionals. 
+                If you are in crisis or experiencing severe symptoms, please seek immediate professional help.
+            </p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-grid gap-2 mb-4">
+            <a href="{% url 'assessment' %}" class="btn btn-primary btn-lg">Take Assessment Again</a>
+            <a href="{% url 'history' %}" class="btn btn-outline-secondary">View Assessment History</a>
+            <a href="{% url 'index' %}" class="btn btn-outline-secondary">Back to Home</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    @media print {
+        .btn, nav, footer {
+            display: none;
+        }
+        .card {
+            page-break-inside: avoid;
+        }
+    }
+</style>
+{% endblock %}

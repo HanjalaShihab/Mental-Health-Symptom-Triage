@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+
+{% block title %}Mental Health Symptom Triage - Home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section mb-5">
+    <div class="row align-items-center">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-4 fw-bold mb-3">
+                <i class="fas fa-brain"></i> Your Mental Health Matters
+            </h1>
+            <p class="lead mb-4 fs-5">
+                Get a professional-grade mental health assessment based on WHO mhGAP guidelines. 
+                Fast, confidential, and designed for you.
+            </p>
+            
+            {% if user.is_authenticated %}
+                <div class="alert alert-success border-0 mb-4" style="background: rgba(255,255,255,0.15); color: white;">
+                    <i class="fas fa-user-check"></i>
+                    <strong>Welcome back, {{ user.first_name|default:user.username }}!</strong>
+                    {% if last_assessment %}
+                        <br><small>Last assessment: <strong>{{ last_assessment|date:"F d, Y" }}</strong></small>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="row align-items-center">
+    <div class="col-lg-6">
+        <h2 class="mb-4" style="font-size: 2rem; font-weight: 800;">
+            <span class="text-gradient">Take Control of Your Mental Health</span>
+        </h2>
+        <p class="fs-5 text-muted mb-4 lh-lg">
+            This comprehensive assessment tool helps you evaluate your mental health symptoms and provides personalized guidance. 
+            Based on the WHO mhGAP framework, our assessment is quick, confidential, and scientifically validated.
+        </p>
+        
+        <div class="mb-5">
+            <div class="row g-3">
+                <div class="col-sm-6">
+                    <div class="feature-card">
+                        <div class="icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h6>100% Confidential</h6>
+                        <p class="small">Your data is encrypted and secure</p>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="feature-card">
+                        <div class="icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h6>5 Minutes</h6>
+                        <p class="small">Quick assessment process</p>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="feature-card">
+                        <div class="icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h6>Track Progress</h6>
+                        <p class="small">Monitor your mental health over time</p>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="feature-card">
+                        <div class="icon">
+                            <i class="fas fa-stethoscope"></i>
+                        </div>
+                        <h6>Expert Guidance</h6>
+                        <p class="small">WHO mhGAP validated</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {% if user.is_authenticated %}
+            <div class="d-grid gap-3 d-sm-flex">
+                <a href="{% url 'assessment' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-arrow-right"></i> Start Assessment
+                </a>
+                <a href="{% url 'history' %}" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-history"></i> View History
+                </a>
+            </div>
+        {% else %}
+            <div class="d-grid gap-3 d-sm-flex">
+                <a href="{% url 'assessment' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-arrow-right"></i> Start Free Assessment
+                </a>
+                <a href="{% url 'about' %}" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-info-circle"></i> Learn More
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Right Side Image/Graphic -->
+    <div class="col-lg-6 text-center d-none d-lg-block">
+        <div style="font-size: 150px; opacity: 0.9;">
+            <i class="fas fa-spa" style="color: rgba(240, 147, 251, 0.8);"></i>
+        </div>
+        <p class="text-muted mt-3">Prioritize your mental wellness</p>
+    </div>
+</div>
+
+<!-- Call to Action for Non-Authenticated Users -->
+{% if not user.is_authenticated %}
+<div class="row mt-5">
+    <div class="col-lg-10 mx-auto">
+        <div class="card card-body border-0" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h5 class="mb-2">
+                        <i class="fas fa-star"></i> Create an Account to Track Your Progress
+                    </h5>
+                    <p class="text-muted mb-md-0">
+                        Save your assessments, track trends over time, and get personalized insights into your mental health journey.
+                    </p>
+                </div>
+                <div class="col-md-4 text-md-end text-center mt-3 mt-md-0">
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'register' %}" class="btn btn-success">
+                            <i class="fas fa-user-plus"></i> Sign Up
+                        </a>
+                        <a href="{% url 'login' %}" class="btn btn-outline-success">
+                            Login
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm mb-3">
+            <div class="card-body">
+                <h5 class="card-title">📊 What to Expect</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2">✓ Answer 20 questions about your symptoms</li>
+                    <li class="mb-2">✓ Get instant assessment results</li>
+                    <li class="mb-2">✓ Receive personalized recommendations</li>
+                    {% if user.is_authenticated %}
+                        <li class="mb-2">✓ Track your assessment history</li>
+                        <li class="mb-2">✓ Monitor your mental health progress</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">⏱️ How Long?</h5>
+                <p class="card-text mb-0">
+                    The assessment takes approximately <strong>5-10 minutes</strong> to complete.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if user.is_authenticated and recent_assessments %}
+<hr class="my-5">
+
+<div class="row">
+    <div class="col-12">
+        <h3 class="mb-4">Your Recent Assessments</h3>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Date</th>
+                        <th>Severity</th>
+                        <th>Symptoms</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for assessment in recent_assessments %}
+                    <tr>
+                        <td>{{ assessment.created_at|date:"M d, Y H:i" }}</td>
+                        <td>
+                            <span class="badge bg-{% if assessment.severity == 'Crisis' %}danger{% elif assessment.severity == 'Severe' %}danger{% elif assessment.severity == 'Moderate' %}warning{% elif assessment.severity == 'Mild' %}info{% else %}success{% endif %}">
+                                {{ assessment.get_severity_display }}
+                            </span>
+                        </td>
+                        <td>{{ assessment.get_symptom_count }} symptoms</td>
+                        <td>
+                            <a href="{% url 'results' assessment.id %}" class="btn btn-sm btn-outline-primary">View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <a href="{% url 'history' %}" class="btn btn-outline-primary">View Full History</a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

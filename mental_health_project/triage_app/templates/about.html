@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block title %}About Mental Health Triage{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">About Mental Health Symptom Triage</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">What is This Tool?</h5>
+            </div>
+            <div class="card-body">
+                <p>
+                    The Mental Health Symptom Triage tool is a digital screening application that helps 
+                    individuals assess their mental health symptoms based on established clinical guidelines.
+                </p>
+                <p>
+                    It uses the <strong>WHO mhGAP (Mental Health Gap Action Programme)</strong> framework 
+                    to categorize symptoms and provide preliminary assessments.
+                </p>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">How Does It Work?</h5>
+            </div>
+            <div class="card-body">
+                <ol>
+                    <li><strong>Assessment:</strong> You answer 20 carefully selected questions about your mental health symptoms</li>
+                    <li><strong>Analysis:</strong> The system analyzes your responses using clinical guidelines</li>
+                    <li><strong>Results:</strong> You receive a severity classification and personalized recommendations</li>
+                    <li><strong>Resources:</strong> The tool provides guidance on next steps and helpful resources</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Severity Levels</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h6>✅ <strong>No Significant Concerns</strong></h6>
+                        <p class="small text-muted">Minimal or no symptoms detected. Maintain healthy routines.</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>🟢 <strong>Mild Concerns</strong></h6>
+                        <p class="small text-muted">Some symptoms present. Consider counseling if they persist.</p>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h6>🟡 <strong>Moderate Concerns</strong></h6>
+                        <p class="small text-muted">Multiple symptoms affecting daily life. Professional help recommended.</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>🔴 <strong>Severe Concerns</strong></h6>
+                        <p class="small text-muted">Significant symptoms. Urgent professional help needed.</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>🚨 <strong>Immediate Crisis</strong></h6>
+                        <p class="small text-muted">Acute risk. Emergency services needed immediately.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4 border-warning">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">⚠️ Important Disclaimer</h5>
+            </div>
+            <div class="card-body">
+                <ul class="mb-0">
+                    <li>This tool provides <strong>preliminary screening only</strong></li>
+                    <li>It is <strong>NOT a diagnosis</strong> or substitute for professional assessment</li>
+                    <li>Cannot replace care from qualified mental health professionals</li>
+                    <li>Results should be discussed with a healthcare provider</li>
+                    <li>If in crisis, <strong>seek immediate professional help</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Clinical Framework</h5>
+            </div>
+            <div class="card-body">
+                <p>
+                    This tool is based on the <strong>WHO mhGAP guidelines</strong>, which provide evidence-based 
+                    recommendations for the assessment and management of mental, neurological, and substance use disorders.
+                </p>
+                <p>
+                    The questions cover symptoms associated with:
+                </p>
+                <ul>
+                    <li>Depression and mood disorders</li>
+                    <li>Anxiety disorders and panic</li>
+                    <li>Psychotic symptoms</li>
+                    <li>Risk of self-harm</li>
+                    <li>Substance use patterns</li>
+                    <li>Cognitive and behavioral changes</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Privacy & Data</h5>
+            </div>
+            <div class="card-body">
+                <p>
+                    Your assessment data is stored locally and used only to provide you with personalized results 
+                    and recommendations. We do not share your information with third parties.
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Get Help</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>If you're in crisis or experiencing thoughts of self-harm:</strong></p>
+                <ul>
+                    <li>📞 <strong>Emergency Services:</strong> Call 999 (UK) or 112 (EU)</li>
+                    <li>💬 <strong>Crisis Text Line:</strong> Text to a designated crisis line</li>
+                    <li>🏥 <strong>Emergency Room:</strong> Go to your nearest hospital</li>
+                    <li>👨‍⚕️ <strong>Talk to Someone:</strong> Reach out to a trusted friend, family member, or professional</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-light sticky-top" style="top: 20px;">
+            <div class="card-body">
+                <h5 class="card-title">Quick Actions</h5>
+                <div class="d-grid gap-2">
+                    <a href="{% url 'assessment' %}" class="btn btn-primary">Start Assessment</a>
+                    <a href="{% url 'history' %}" class="btn btn-outline-secondary">View History</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
