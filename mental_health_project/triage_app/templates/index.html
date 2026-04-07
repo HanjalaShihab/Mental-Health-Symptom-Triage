@@ -3,205 +3,398 @@
 {% block title %}Mental Health Symptom Triage - Home{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<div class="hero-section mb-5">
-    <div class="row align-items-center">
-        <div class="col-lg-8 mx-auto text-center">
-            <h1 class="display-4 fw-bold mb-3">
-                <i class="fas fa-brain"></i> Your Mental Health Matters
-            </h1>
-            <p class="lead mb-4 fs-5">
-                Get a professional-grade mental health assessment based on WHO mhGAP guidelines. 
-                Fast, confidential, and designed for you.
-            </p>
-            
-            {% if user.is_authenticated %}
-                <div class="alert alert-success border-0 mb-4" style="background: rgba(255,255,255,0.15); color: white;">
-                    <i class="fas fa-user-check"></i>
-                    <strong>Welcome back, {{ user.first_name|default:user.username }}!</strong>
-                    {% if last_assessment %}
-                        <br><small>Last assessment: <strong>{{ last_assessment|date:"F d, Y" }}</strong></small>
-                    {% endif %}
-                </div>
-            {% endif %}
-        </div>
-    </div>
-</div>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Sora:wght@400;600;700&display=swap');
 
-<!-- Main Content -->
-<div class="row align-items-center">
-    <div class="col-lg-6">
-        <h2 class="mb-4" style="font-size: 2rem; font-weight: 800;">
-            <span class="text-gradient">Take Control of Your Mental Health</span>
-        </h2>
-        <p class="fs-5 text-muted mb-4 lh-lg">
-            This comprehensive assessment tool helps you evaluate your mental health symptoms and provides personalized guidance. 
-            Based on the WHO mhGAP framework, our assessment is quick, confidential, and scientifically validated.
-        </p>
-        
-        <div class="mb-5">
-            <div class="row g-3">
-                <div class="col-sm-6">
-                    <div class="feature-card">
-                        <div class="icon">
-                            <i class="fas fa-lock"></i>
-                        </div>
-                        <h6>100% Confidential</h6>
-                        <p class="small">Your data is encrypted and secure</p>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="feature-card">
-                        <div class="icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <h6>5 Minutes</h6>
-                        <p class="small">Quick assessment process</p>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="feature-card">
-                        <div class="icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <h6>Track Progress</h6>
-                        <p class="small">Monitor your mental health over time</p>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="feature-card">
-                        <div class="icon">
-                            <i class="fas fa-stethoscope"></i>
-                        </div>
-                        <h6>Expert Guidance</h6>
-                        <p class="small">WHO mhGAP validated</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        {% if user.is_authenticated %}
-            <div class="d-grid gap-3 d-sm-flex">
-                <a href="{% url 'assessment' %}" class="btn btn-primary btn-lg">
-                    <i class="fas fa-arrow-right"></i> Start Assessment
-                </a>
-                <a href="{% url 'history' %}" class="btn btn-outline-primary btn-lg">
-                    <i class="fas fa-history"></i> View History
-                </a>
-            </div>
-        {% else %}
-            <div class="d-grid gap-3 d-sm-flex">
-                <a href="{% url 'assessment' %}" class="btn btn-primary btn-lg">
-                    <i class="fas fa-arrow-right"></i> Start Free Assessment
-                </a>
-                <a href="{% url 'about' %}" class="btn btn-outline-primary btn-lg">
-                    <i class="fas fa-info-circle"></i> Learn More
-                </a>
-            </div>
-        {% endif %}
-    </div>
+    .landing-shell {
+        position: relative;
+        overflow: hidden;
+        border-radius: 24px;
+        background:
+            radial-gradient(circle at 8% 15%, rgba(255, 184, 108, 0.35), transparent 35%),
+            radial-gradient(circle at 85% 10%, rgba(88, 168, 255, 0.35), transparent 40%),
+            linear-gradient(130deg, #0f172a 0%, #13263f 45%, #1e3a4d 100%);
+        color: #f8fafc;
+        padding: 3rem;
+        font-family: 'Sora', 'Segoe UI', sans-serif;
+        box-shadow: 0 22px 50px rgba(9, 18, 34, 0.35);
+        animation: landingRise 0.65s ease-out;
+    }
 
-    <!-- Right Side Image/Graphic -->
-    <div class="col-lg-6 text-center d-none d-lg-block">
-        <div style="font-size: 150px; opacity: 0.9;">
-            <i class="fas fa-spa" style="color: rgba(240, 147, 251, 0.8);"></i>
-        </div>
-        <p class="text-muted mt-3">Prioritize your mental wellness</p>
-    </div>
-</div>
+    .landing-shell::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+        background-size: 34px 34px;
+        opacity: 0.25;
+        pointer-events: none;
+        z-index: 1;
+    }
 
-<!-- Call to Action for Non-Authenticated Users -->
+    .landing-grid {
+        position: relative;
+        z-index: 2;
+    }
+
+    .landing-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        border: 1px solid rgba(255, 255, 255, 0.32);
+        border-radius: 999px;
+        padding: 0.45rem 0.95rem;
+        font-size: 0.82rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: rgba(255, 255, 255, 0.12);
+    }
+
+    .landing-title {
+        margin-top: 1rem;
+        font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+        font-size: clamp(2rem, 4.5vw, 3.6rem);
+        line-height: 1.08;
+        letter-spacing: -0.03em;
+        font-weight: 700;
+    }
+
+    .landing-subtitle {
+        margin-top: 1rem;
+        max-width: 41rem;
+        font-size: 1.06rem;
+        color: rgba(241, 245, 249, 0.9);
+    }
+
+    .landing-cta {
+        margin-top: 2rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .landing-btn {
+        border-radius: 13px;
+        border: none;
+        padding: 0.8rem 1.2rem;
+        font-weight: 600;
+        text-transform: none;
+        letter-spacing: 0.01em;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
+
+    .landing-btn-primary {
+        background: linear-gradient(120deg, #f59e0b, #fb7185);
+        color: #101828;
+        box-shadow: 0 10px 24px rgba(251, 113, 133, 0.35);
+    }
+
+    .landing-btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 28px rgba(251, 113, 133, 0.4);
+        color: #101828;
+    }
+
+    .landing-btn-outline {
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        color: #f8fafc;
+        background: rgba(15, 23, 42, 0.25);
+    }
+
+    .landing-btn-outline:hover {
+        transform: translateY(-2px);
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.12);
+    }
+
+    .landing-stats {
+        margin-top: 2.3rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.1rem;
+        align-items: stretch;
+        border-top: 1px solid rgba(255, 255, 255, 0.3);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 0.9rem 0;
+    }
+
+    .stat-item {
+        flex: 1 1 10rem;
+        animation: delayedFade 0.65s ease both;
+    }
+
+    .stat-item:nth-child(2) {
+        animation-delay: 0.12s;
+    }
+
+    .stat-item:nth-child(3) {
+        animation-delay: 0.24s;
+    }
+
+    .stat-item h5 {
+        margin: 0;
+        font-size: 1.6rem;
+        font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+        color: #fbbf24;
+    }
+
+    .stat-item p {
+        margin: 0.2rem 0 0;
+        font-size: 0.89rem;
+        color: rgba(226, 232, 240, 0.95);
+    }
+
+    .journey-heading {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+        font-weight: 700;
+        color: #e2e8f0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+        padding-bottom: 0.45rem;
+    }
+
+    .journey-list {
+        list-style: none;
+        margin: 0;
+        padding: 0 0 0 1rem;
+        border-left: 2px solid rgba(255, 255, 255, 0.35);
+    }
+
+    .journey-list li {
+        margin-bottom: 1.2rem;
+        position: relative;
+        animation: delayedFade 0.65s ease both;
+    }
+
+    .journey-list li:last-child {
+        margin-bottom: 0;
+    }
+
+    .journey-list li::before {
+        content: '';
+        position: absolute;
+        left: -1.38rem;
+        top: 0.45rem;
+        width: 0.7rem;
+        height: 0.7rem;
+        border-radius: 50%;
+        background: linear-gradient(145deg, #22d3ee, #a3e635);
+        box-shadow: 0 0 0 5px rgba(34, 211, 238, 0.18);
+    }
+
+    .journey-step {
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.72rem;
+        color: rgba(226, 232, 240, 0.8);
+        margin-bottom: 0.15rem;
+    }
+
+    .journey-list strong {
+        font-size: 1rem;
+        display: block;
+    }
+
+    .journey-list span {
+        color: rgba(241, 245, 249, 0.87);
+        font-size: 0.9rem;
+    }
+
+    .trust-strip {
+        margin-top: 1.3rem;
+        border-top: 1px dashed rgba(255, 255, 255, 0.28);
+        padding-top: 1rem;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.8rem;
+        font-size: 0.88rem;
+        color: rgba(241, 245, 249, 0.95);
+    }
+
+    .trust-strip i {
+        color: #fbbf24;
+        margin-right: 0.35rem;
+    }
+
+    .dashboard-home {
+        padding: 0.6rem 0;
+    }
+
+    .recent-table thead th {
+        font-size: 0.84rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    @keyframes landingRise {
+        from {
+            opacity: 0;
+            transform: translateY(16px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes delayedFade {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 991px) {
+        .landing-shell {
+            padding: 1.5rem;
+        }
+
+        .landing-stats,
+        .trust-strip {
+            display: grid;
+            grid-template-columns: 1fr;
+        }
+
+        .landing-title {
+            font-size: 2rem;
+        }
+    }
+</style>
+
 {% if not user.is_authenticated %}
-<div class="row mt-5">
-    <div class="col-lg-10 mx-auto">
-        <div class="card card-body border-0" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);">
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <h5 class="mb-2">
-                        <i class="fas fa-star"></i> Create an Account to Track Your Progress
-                    </h5>
-                    <p class="text-muted mb-md-0">
-                        Save your assessments, track trends over time, and get personalized insights into your mental health journey.
-                    </p>
-                </div>
-                <div class="col-md-4 text-md-end text-center mt-3 mt-md-0">
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <a href="{% url 'register' %}" class="btn btn-success">
-                            <i class="fas fa-user-plus"></i> Sign Up
-                        </a>
-                        <a href="{% url 'login' %}" class="btn btn-outline-success">
-                            Login
-                        </a>
-                    </div>
-                </div>
+<section class="landing-shell">
+    <div class="landing-grid row g-4 align-items-center">
+        <div class="col-lg-7">
+            <div class="landing-kicker">
+                <i class="fas fa-heart-pulse"></i>
+                WHO mhGAP-informed screening
             </div>
-        </div>
-    </div>
-</div>
-{% endif %}
-    <div class="col-md-6">
-        <div class="card border-0 shadow-sm mb-3">
-            <div class="card-body">
-                <h5 class="card-title">📊 What to Expect</h5>
-                <ul class="list-unstyled">
-                    <li class="mb-2">✓ Answer 20 questions about your symptoms</li>
-                    <li class="mb-2">✓ Get instant assessment results</li>
-                    <li class="mb-2">✓ Receive personalized recommendations</li>
-                    {% if user.is_authenticated %}
-                        <li class="mb-2">✓ Track your assessment history</li>
-                        <li class="mb-2">✓ Monitor your mental health progress</li>
-                    {% endif %}
-                </ul>
+            <h1 class="landing-title">
+                A sharper first step for your mental wellness journey.
+            </h1>
+            <p class="landing-subtitle">
+                Private, fast, and practical. In minutes, MindCare helps you understand symptom severity and suggests next actions you can take today.
+            </p>
+            <div class="landing-cta">
+                <a href="{% url 'register' %}" class="btn landing-btn landing-btn-primary">
+                    <i class="fas fa-user-plus me-1"></i> Create Free Account
+                </a>
+                <a href="{% url 'login' %}" class="btn landing-btn landing-btn-outline">
+                    <i class="fas fa-right-to-bracket me-1"></i> Login
+                </a>
+                <a href="{% url 'about' %}" class="btn landing-btn landing-btn-outline">
+                    <i class="fas fa-circle-info me-1"></i> How It Works
+                </a>
             </div>
-        </div>
-        
-        <div class="card border-0 shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title">⏱️ How Long?</h5>
-                <p class="card-text mb-0">
-                    The assessment takes approximately <strong>5-10 minutes</strong> to complete.
-                </p>
-            </div>
-        </div>
-    </div>
-</div>
 
-{% if user.is_authenticated and recent_assessments %}
-<hr class="my-5">
+            <div class="landing-stats">
+                <article class="stat-item">
+                    <h5>5-10 min</h5>
+                    <p>Complete the symptom check quickly</p>
+                </article>
+                <article class="stat-item">
+                    <h5>20 prompts</h5>
+                    <p>Structured questions, clear outcomes</p>
+                </article>
+                <article class="stat-item">
+                    <h5>100% private</h5>
+                    <p>Your responses stay confidential</p>
+                </article>
+            </div>
 
-<div class="row">
-    <div class="col-12">
-        <h3 class="mb-4">Your Recent Assessments</h3>
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead class="table-light">
-                    <tr>
-                        <th>Date</th>
-                        <th>Severity</th>
-                        <th>Symptoms</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for assessment in recent_assessments %}
-                    <tr>
-                        <td>{{ assessment.created_at|date:"M d, Y H:i" }}</td>
-                        <td>
-                            <span class="badge bg-{% if assessment.severity == 'Crisis' %}danger{% elif assessment.severity == 'Severe' %}danger{% elif assessment.severity == 'Moderate' %}warning{% elif assessment.severity == 'Mild' %}info{% else %}success{% endif %}">
-                                {{ assessment.get_severity_display }}
-                            </span>
-                        </td>
-                        <td>{{ assessment.get_symptom_count }} symptoms</td>
-                        <td>
-                            <a href="{% url 'results' assessment.id %}" class="btn btn-sm btn-outline-primary">View</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="trust-strip">
+                <div><i class="fas fa-lock"></i> Secure account flow</div>
+                <div><i class="fas fa-notes-medical"></i> Clinically inspired rubric</div>
+                <div><i class="fas fa-seedling"></i> Actionable recommendations</div>
+            </div>
         </div>
-        <a href="{% url 'history' %}" class="btn btn-outline-primary">View Full History</a>
+
+        <div class="col-lg-5">
+            <h4 class="journey-heading">What happens next?</h4>
+            <ol class="journey-list">
+                <li>
+                    <div class="journey-step">Step 01</div>
+                    <strong>Sign up in seconds</strong>
+                    <span>Create your secure account and unlock your private dashboard.</span>
+                </li>
+                <li>
+                    <div class="journey-step">Step 02</div>
+                    <strong>Complete the assessment</strong>
+                    <span>Answer focused prompts about recent symptoms and mood patterns.</span>
+                </li>
+                <li>
+                    <div class="journey-step">Step 03</div>
+                    <strong>Get triage guidance</strong>
+                    <span>Receive severity insights with clear recommendations for next steps.</span>
+                </li>
+            </ol>
+        </div>
     </div>
-</div>
+</section>
+{% else %}
+<section class="dashboard-home">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h2 class="mb-1">Welcome back, {{ user.first_name|default:user.username }}.</h2>
+            <p class="text-muted mb-0">
+                Continue your mental wellness check-ins.
+                {% if last_assessment %}
+                    Last assessment: <strong>{{ last_assessment|date:"F d, Y" }}</strong>.
+                {% endif %}
+            </p>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+            <a href="{% url 'assessment' %}" class="btn btn-primary">
+                <i class="fas fa-play me-1"></i> Start Assessment
+            </a>
+            <a href="{% url 'history' %}" class="btn btn-outline-primary">
+                <i class="fas fa-clock-rotate-left me-1"></i> View History
+            </a>
+        </div>
+    </div>
+
+    {% if recent_assessments %}
+    <h4 class="mb-3">Recent Assessments</h4>
+    <div class="table-responsive recent-table">
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Date</th>
+                    <th>Severity</th>
+                    <th>Symptoms</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for assessment in recent_assessments %}
+                <tr>
+                    <td>{{ assessment.created_at|date:"M d, Y H:i" }}</td>
+                    <td>
+                        <span class="badge bg-{% if assessment.severity == 'Crisis' %}danger{% elif assessment.severity == 'Severe' %}danger{% elif assessment.severity == 'Moderate' %}warning{% elif assessment.severity == 'Mild' %}info{% else %}success{% endif %}">
+                            {{ assessment.get_severity_display }}
+                        </span>
+                    </td>
+                    <td>{{ assessment.get_symptom_count }} symptoms</td>
+                    <td>
+                        <a href="{% url 'results' assessment.id %}" class="btn btn-sm btn-outline-primary">View</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info mb-0">
+        <i class="fas fa-info-circle me-2"></i>
+        No assessments yet. Start your first check-in now.
+    </div>
+    {% endif %}
+</section>
 {% endif %}
 {% endblock %}
