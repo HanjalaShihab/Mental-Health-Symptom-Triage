@@ -4,397 +4,636 @@
 
 {% block content %}
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Sora:wght@400;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=DM+Serif+Display:wght@400&display=swap');
 
-    .landing-shell {
+    /* ===== Landing Page ===== */
+    .landing-hero {
+        min-height: 100vh;
+        background: #000;
         position: relative;
         overflow: hidden;
-        border-radius: 24px;
-        background:
-            radial-gradient(circle at 8% 15%, rgba(255, 184, 108, 0.35), transparent 35%),
-            radial-gradient(circle at 85% 10%, rgba(88, 168, 255, 0.35), transparent 40%),
-            linear-gradient(130deg, #0f172a 0%, #13263f 45%, #1e3a4d 100%);
-        color: #f8fafc;
-        padding: 3rem;
-        font-family: 'Sora', 'Segoe UI', sans-serif;
-        box-shadow: 0 22px 50px rgba(9, 18, 34, 0.35);
-        animation: landingRise 0.65s ease-out;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 2rem;
+        font-family: 'Roboto Mono', monospace;
     }
 
-    .landing-shell::before {
+    .landing-hero::before {
         content: '';
         position: absolute;
-        inset: 0;
-        background-image:
-            linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
-        background-size: 34px 34px;
-        opacity: 0.25;
-        pointer-events: none;
-        z-index: 1;
+        width: 100%;
+        height: 2px;
+        top: 20%;
+        left: 0;
+        background: linear-gradient(90deg, transparent, #00ff88 50%, transparent);
+        animation: scanline 4s linear infinite;
     }
 
-    .landing-grid {
+    .landing-hero::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 255, 136, 0.03) 2px, rgba(0, 255, 136, 0.03) 4px);
+        pointer-events: none;
+    }
+
+    @keyframes scanline {
+        0% { top: 0%; }
+        100% { top: 100%; }
+    }
+
+    .landing-top {
         position: relative;
         z-index: 2;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 3rem;
     }
 
-    .landing-kicker {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.55rem;
-        border: 1px solid rgba(255, 255, 255, 0.32);
-        border-radius: 999px;
-        padding: 0.45rem 0.95rem;
-        font-size: 0.82rem;
-        letter-spacing: 0.08em;
+    .landing-logo {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #00ff88;
+        letter-spacing: 0.2em;
         text-transform: uppercase;
-        background: rgba(255, 255, 255, 0.12);
+    }
+
+    .landing-nav {
+        display: flex;
+        gap: 2rem;
+    }
+
+    .landing-nav a {
+        color: #888;
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: color 0.3s ease;
+        position: relative;
+    }
+
+    .landing-nav a::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background: #00ff88;
+        transition: width 0.3s ease;
+    }
+
+    .landing-nav a:hover {
+        color: #00ff88;
+    }
+
+    .landing-nav a:hover::after {
+        width: 100%;
+    }
+
+    .landing-main {
+        position: relative;
+        z-index: 2;
+        flex: 1;
+        display: flex;
+        align-items: center;
+    }
+
+    .landing-content {
+        max-width: 900px;
+    }
+
+    .landing-status {
+        display: inline-block;
+        color: #00ff88;
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+    }
+
+    .landing-status::before {
+        content: '● ';
+        color: #00ff88;
+        margin-right: 0.5rem;
     }
 
     .landing-title {
-        margin-top: 1rem;
-        font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
-        font-size: clamp(2rem, 4.5vw, 3.6rem);
-        line-height: 1.08;
-        letter-spacing: -0.03em;
-        font-weight: 700;
+        font-family: 'DM Serif Display', serif;
+        font-size: clamp(3rem, 8vw, 6rem);
+        font-weight: 400;
+        color: #fff;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+        letter-spacing: -0.02em;
     }
 
     .landing-subtitle {
-        margin-top: 1rem;
-        max-width: 41rem;
-        font-size: 1.06rem;
-        color: rgba(241, 245, 249, 0.9);
+        font-size: 1.1rem;
+        color: #aaa;
+        max-width: 600px;
+        line-height: 1.7;
+        margin-bottom: 3rem;
+        font-weight: 400;
+    }
+
+    .landing-cta-group {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 4rem;
     }
 
     .landing-cta {
-        margin-top: 2rem;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.75rem;
-    }
-
-    .landing-btn {
-        border-radius: 13px;
-        border: none;
-        padding: 0.8rem 1.2rem;
+        padding: 1rem 2rem;
+        border: 2px solid #00ff88;
+        background: transparent;
+        color: #00ff88;
+        text-decoration: none;
+        font-size: 0.9rem;
         font-weight: 600;
-        text-transform: none;
-        letter-spacing: 0.01em;
-        transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-family: 'Roboto Mono', monospace;
+        position: relative;
+        overflow: hidden;
     }
 
-    .landing-btn-primary {
-        background: linear-gradient(120deg, #f59e0b, #fb7185);
-        color: #101828;
-        box-shadow: 0 10px 24px rgba(251, 113, 133, 0.35);
+    .landing-cta::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: #00ff88;
+        transition: left 0.3s ease;
+        z-index: -1;
     }
 
-    .landing-btn-primary:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 16px 28px rgba(251, 113, 133, 0.4);
-        color: #101828;
+    .landing-cta:hover::before {
+        left: 0;
     }
 
-    .landing-btn-outline {
-        border: 1px solid rgba(255, 255, 255, 0.5);
-        color: #f8fafc;
-        background: rgba(15, 23, 42, 0.25);
+    .landing-cta:hover {
+        color: #000;
     }
 
-    .landing-btn-outline:hover {
-        transform: translateY(-2px);
-        color: #ffffff;
-        background: rgba(255, 255, 255, 0.12);
+    .landing-cta-secondary {
+        border-color: #666;
+        color: #888;
+    }
+
+    .landing-cta-secondary::before {
+        background: transparent;
+    }
+
+    .landing-cta-secondary:hover {
+        color: #fff;
+        border-color: #fff;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .landing-footer {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid #333;
+        padding-top: 2rem;
+        font-size: 0.85rem;
+        color: #666;
     }
 
     .landing-stats {
-        margin-top: 2.3rem;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1.1rem;
-        align-items: stretch;
-        border-top: 1px solid rgba(255, 255, 255, 0.3);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 0.9rem 0;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
     }
 
-    .stat-item {
-        flex: 1 1 10rem;
-        animation: delayedFade 0.65s ease both;
+    .stat {
+        text-align: center;
     }
 
-    .stat-item:nth-child(2) {
-        animation-delay: 0.12s;
-    }
-
-    .stat-item:nth-child(3) {
-        animation-delay: 0.24s;
-    }
-
-    .stat-item h5 {
-        margin: 0;
-        font-size: 1.6rem;
-        font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
-        color: #fbbf24;
-    }
-
-    .stat-item p {
-        margin: 0.2rem 0 0;
-        font-size: 0.89rem;
-        color: rgba(226, 232, 240, 0.95);
-    }
-
-    .journey-heading {
-        font-size: 1.1rem;
-        margin-bottom: 1rem;
+    .stat-num {
+        font-size: 2rem;
         font-weight: 700;
-        color: #e2e8f0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.25);
-        padding-bottom: 0.45rem;
+        color: #00ff88;
+        margin-bottom: 0.5rem;
     }
 
-    .journey-list {
-        list-style: none;
-        margin: 0;
-        padding: 0 0 0 1rem;
-        border-left: 2px solid rgba(255, 255, 255, 0.35);
+    .stat-text {
+        font-size: 0.8rem;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
     }
 
-    .journey-list li {
-        margin-bottom: 1.2rem;
+    /* ===== Dashboard ===== */
+    .dashboard-main {
+        background: #0a0a0a;
+        min-height: 100vh;
+        padding: 2rem;
+        font-family: 'Roboto Mono', monospace;
+    }
+
+    .dashboard-header-section {
+        max-width: 1400px;
+        margin: 0 auto 4rem;
+        border-bottom: 2px solid #333;
+        padding-bottom: 2rem;
+    }
+
+    .dashboard-title h2 {
+        font-family: 'DM Serif Display', serif;
+        font-size: 3rem;
+        font-weight: 400;
+        color: #fff;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .dashboard-intro {
+        color: #888;
+        font-size: 1rem;
+        max-width: 800px;
+    }
+
+    .dashboard-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .dash-btn {
+        padding: 0.85rem 1.8rem;
+        border: 2px solid #00ff88;
+        background: transparent;
+        color: #00ff88;
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-family: 'Roboto Mono', monospace;
         position: relative;
-        animation: delayedFade 0.65s ease both;
     }
 
-    .journey-list li:last-child {
-        margin-bottom: 0;
-    }
-
-    .journey-list li::before {
+    .dash-btn::before {
         content: '';
         position: absolute;
-        left: -1.38rem;
-        top: 0.45rem;
-        width: 0.7rem;
-        height: 0.7rem;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: #00ff88;
+        transition: left 0.3s ease;
+        z-index: -1;
+    }
+
+    .dash-btn:hover::before {
+        left: 0;
+    }
+
+    .dash-btn:hover {
+        color: #000;
+    }
+
+    .dash-btn-outline {
+        border-color: #666;
+        color: #888;
+    }
+
+    .dash-btn-outline::before {
+        display: none;
+    }
+
+    .dash-btn-outline:hover {
+        background: rgba(0, 255, 136, 0.1);
+        border-color: #00ff88;
+        color: #00ff88;
+    }
+
+    /* ===== Assessment Cards ===== */
+    .assessments-section {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .section-title {
+        font-family: 'DM Serif Display', serif;
+        font-size: 2rem;
+        font-weight: 400;
+        color: #fff;
+        margin-bottom: 2rem;
+    }
+
+    .assessments-timeline {
+        position: relative;
+        padding-left: 40px;
+    }
+
+    .assessments-timeline::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: linear-gradient(180deg, #00ff88, transparent);
+    }
+
+    .assessment-card {
+        margin-bottom: 3rem;
+        position: relative;
+    }
+
+    .assessment-card::before {
+        content: '';
+        position: absolute;
+        left: -28px;
+        top: 20px;
+        width: 14px;
+        height: 14px;
+        background: #00ff88;
+        border: 3px solid #000;
         border-radius: 50%;
-        background: linear-gradient(145deg, #22d3ee, #a3e635);
-        box-shadow: 0 0 0 5px rgba(34, 211, 238, 0.18);
     }
 
-    .journey-step {
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        font-size: 0.72rem;
-        color: rgba(226, 232, 240, 0.8);
-        margin-bottom: 0.15rem;
+    .assessment-card-inner {
+        background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0, 100, 255, 0.05));
+        border: 1px solid #333;
+        padding: 2rem;
+        transition: all 0.3s ease;
     }
 
-    .journey-list strong {
-        font-size: 1rem;
-        display: block;
+    .assessment-card:hover .assessment-card-inner {
+        border-color: #00ff88;
+        background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 100, 255, 0.1));
+        box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
     }
 
-    .journey-list span {
-        color: rgba(241, 245, 249, 0.87);
+    .assessment-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .assessment-date-time {
+        color: #00ff88;
         font-size: 0.9rem;
     }
 
-    .trust-strip {
-        margin-top: 1.3rem;
-        border-top: 1px dashed rgba(255, 255, 255, 0.28);
-        padding-top: 1rem;
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 0.8rem;
-        font-size: 0.88rem;
-        color: rgba(241, 245, 249, 0.95);
-    }
-
-    .trust-strip i {
-        color: #fbbf24;
-        margin-right: 0.35rem;
-    }
-
-    .dashboard-home {
-        padding: 0.6rem 0;
-    }
-
-    .recent-table thead th {
-        font-size: 0.84rem;
+    .assessment-severity-badge {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.04em;
+        letter-spacing: 0.1em;
+        border: 1px solid;
     }
 
-    @keyframes landingRise {
-        from {
-            opacity: 0;
-            transform: translateY(16px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .severity-crisis {
+        border-color: #ff3333;
+        color: #ff3333;
+        background: rgba(255, 51, 51, 0.1);
     }
 
-    @keyframes delayedFade {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .severity-severe {
+        border-color: #ff8800;
+        color: #ff8800;
+        background: rgba(255, 136, 0, 0.1);
     }
 
-    @media (max-width: 991px) {
-        .landing-shell {
-            padding: 1.5rem;
-        }
+    .severity-moderate {
+        border-color: #ffcc00;
+        color: #ffcc00;
+        background: rgba(255, 204, 0, 0.1);
+    }
 
-        .landing-stats,
-        .trust-strip {
-            display: grid;
-            grid-template-columns: 1fr;
+    .severity-mild {
+        border-color: #00ccff;
+        color: #00ccff;
+        background: rgba(0, 204, 255, 0.1);
+    }
+
+    .severity-none {
+        border-color: #00ff88;
+        color: #00ff88;
+        background: rgba(0, 255, 136, 0.1);
+    }
+
+    .assessment-info {
+        color: #aaa;
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .assessment-action {
+        display: inline-block;
+        padding: 0.6rem 1.5rem;
+        border: 1px solid #666;
+        color: #888;
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .assessment-action:hover {
+        border-color: #00ff88;
+        color: #00ff88;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        border: 2px dashed #333;
+        background: rgba(0, 255, 136, 0.02);
+    }
+
+    .empty-state i {
+        font-size: 3.5rem;
+        color: #00ff88;
+        opacity: 0.5;
+        margin-bottom: 1rem;
+        display: block;
+    }
+
+    .empty-state h3 {
+        font-family: 'DM Serif Display', serif;
+        font-size: 1.8rem;
+        color: #fff;
+        margin-bottom: 0.5rem;
+    }
+
+    .empty-state p {
+        color: #888;
+        margin-bottom: 0;
+    }
+
+    @media (max-width: 768px) {
+        .landing-hero {
+            padding: 1rem;
         }
 
         .landing-title {
-            font-size: 2rem;
+            font-size: 2.5rem;
+        }
+
+        .landing-nav {
+            display: none;
+        }
+
+        .landing-footer {
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
+        }
+
+        .landing-stats {
+            grid-template-columns: 1fr;
+        }
+
+        .dashboard-title h2 {
+            font-size: 1.8rem;
+        }
+
+        .assessment-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .assessment-info {
+            flex-direction: column;
+            gap: 0.5rem;
         }
     }
 </style>
 
 {% if not user.is_authenticated %}
-<section class="landing-shell">
-    <div class="landing-grid row g-4 align-items-center">
-        <div class="col-lg-7">
-            <div class="landing-kicker">
-                <i class="fas fa-heart-pulse"></i>
-                WHO mhGAP-informed screening
-            </div>
-            <h1 class="landing-title">
-                A sharper first step for your mental wellness journey.
-            </h1>
+<div class="landing-hero">
+    <div class="landing-top">
+        <div class="landing-logo">
+            <i class="fas fa-brain"></i> PsycheSync
+        </div>
+        <nav class="landing-nav">
+            <a href="#features">Features</a>
+            <a href="{% url 'about' %}">Learn</a>
+        </nav>
+    </div>
+
+    <div class="landing-main">
+        <div class="landing-content">
+            <div class="landing-status">System Ready</div>
+            <h1 class="landing-title">Monitor Your Mind</h1>
             <p class="landing-subtitle">
-                Private, fast, and practical. In minutes, MindCare helps you understand symptom severity and suggests next actions you can take today.
+                Advanced mental health tracking powered by clinical insights. Track patterns, understand severity, take control of your wellness trajectory.
             </p>
-            <div class="landing-cta">
-                <a href="{% url 'register' %}" class="btn landing-btn landing-btn-primary">
-                    <i class="fas fa-user-plus me-1"></i> Create Free Account
+
+            <div class="landing-cta-group">
+                <a href="{% url 'register' %}" class="landing-cta">
+                    <i class="fas fa-rocket"></i> Access Now
                 </a>
-                <a href="{% url 'login' %}" class="btn landing-btn landing-btn-outline">
-                    <i class="fas fa-right-to-bracket me-1"></i> Login
-                </a>
-                <a href="{% url 'about' %}" class="btn landing-btn landing-btn-outline">
-                    <i class="fas fa-circle-info me-1"></i> How It Works
+                <a href="{% url 'login' %}" class="landing-cta landing-cta-secondary">
+                    Returning User
                 </a>
             </div>
-
-            <div class="landing-stats">
-                <article class="stat-item">
-                    <h5>5-10 min</h5>
-                    <p>Complete the symptom check quickly</p>
-                </article>
-                <article class="stat-item">
-                    <h5>20 prompts</h5>
-                    <p>Structured questions, clear outcomes</p>
-                </article>
-                <article class="stat-item">
-                    <h5>100% private</h5>
-                    <p>Your responses stay confidential</p>
-                </article>
-            </div>
-
-            <div class="trust-strip">
-                <div><i class="fas fa-lock"></i> Secure account flow</div>
-                <div><i class="fas fa-notes-medical"></i> Clinically inspired rubric</div>
-                <div><i class="fas fa-seedling"></i> Actionable recommendations</div>
-            </div>
-        </div>
-
-        <div class="col-lg-5">
-            <h4 class="journey-heading">What happens next?</h4>
-            <ol class="journey-list">
-                <li>
-                    <div class="journey-step">Step 01</div>
-                    <strong>Sign up in seconds</strong>
-                    <span>Create your secure account and unlock your private dashboard.</span>
-                </li>
-                <li>
-                    <div class="journey-step">Step 02</div>
-                    <strong>Complete the assessment</strong>
-                    <span>Answer focused prompts about recent symptoms and mood patterns.</span>
-                </li>
-                <li>
-                    <div class="journey-step">Step 03</div>
-                    <strong>Get triage guidance</strong>
-                    <span>Receive severity insights with clear recommendations for next steps.</span>
-                </li>
-            </ol>
         </div>
     </div>
-</section>
+
+    <div class="landing-footer">
+        <div class="landing-stats">
+            <div class="stat">
+                <div class="stat-num">20</div>
+                <div class="stat-text">Clinical Questions</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num">5 min</div>
+                <div class="stat-text">Quick Assessment</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num">∞</div>
+                <div class="stat-text">Private & Secure</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% else %}
-<section class="dashboard-home">
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
-        <div>
-            <h2 class="mb-1">Welcome back, {{ user.first_name|default:user.username }}.</h2>
-            <p class="text-muted mb-0">
-                Continue your mental wellness check-ins.
-                {% if last_assessment %}
-                    Last assessment: <strong>{{ last_assessment|date:"F d, Y" }}</strong>.
-                {% endif %}
-            </p>
+
+<div class="dashboard-main">
+    <div class="dashboard-header-section">
+        <div class="dashboard-title">
+            <h2>{{ user.first_name|default:user.username }}'s Wellness Dashboard</h2>
         </div>
-        <div class="d-flex flex-wrap gap-2">
-            <a href="{% url 'assessment' %}" class="btn btn-primary">
-                <i class="fas fa-play me-1"></i> Start Assessment
+        <div class="dashboard-intro">
+            {% if last_assessment %}
+                Your mental health check-in data is continuously tracked. Last assessment recorded {{ last_assessment|date:"F d, Y" }}. Monitor your patterns and maintain optimal wellness.
+            {% else %}
+                Begin your mental health wellness tracking journey. Initialize your first assessment to start monitoring your symptoms and progress.
+            {% endif %}
+        </div>
+        <div class="dashboard-buttons">
+            <a href="{% url 'assessment' %}" class="dash-btn">
+                <i class="fas fa-circle-play"></i> Start New Assessment
             </a>
-            <a href="{% url 'history' %}" class="btn btn-outline-primary">
-                <i class="fas fa-clock-rotate-left me-1"></i> View History
+            <a href="{% url 'history' %}" class="dash-btn dash-btn-outline">
+                <i class="fas fa-chart-line"></i> View Analytics
             </a>
         </div>
     </div>
 
-    {% if recent_assessments %}
-    <h4 class="mb-3">Recent Assessments</h4>
-    <div class="table-responsive recent-table">
-        <table class="table table-hover">
-            <thead class="table-light">
-                <tr>
-                    <th>Date</th>
-                    <th>Severity</th>
-                    <th>Symptoms</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
+    <div class="assessments-section">
+        {% if recent_assessments %}
+            <h3 class="section-title">Assessment Timeline</h3>
+            <div class="assessments-timeline">
                 {% for assessment in recent_assessments %}
-                <tr>
-                    <td>{{ assessment.created_at|date:"M d, Y H:i" }}</td>
-                    <td>
-                        <span class="badge bg-{% if assessment.severity == 'Crisis' %}danger{% elif assessment.severity == 'Severe' %}danger{% elif assessment.severity == 'Moderate' %}warning{% elif assessment.severity == 'Mild' %}info{% else %}success{% endif %}">
-                            {{ assessment.get_severity_display }}
-                        </span>
-                    </td>
-                    <td>{{ assessment.get_symptom_count }} symptoms</td>
-                    <td>
-                        <a href="{% url 'results' assessment.id %}" class="btn btn-sm btn-outline-primary">View</a>
-                    </td>
-                </tr>
+                <div class="assessment-card">
+                    <div class="assessment-card-inner">
+                        <div class="assessment-header">
+                            <span class="assessment-date-time">
+                                <i class="fas fa-calendar-day"></i> {{ assessment.created_at|date:"F d, Y" }} @ {{ assessment.created_at|time:"H:i" }}
+                            </span>
+                            <span class="assessment-severity-badge {% if assessment.severity == 'Crisis' %}severity-crisis{% elif assessment.severity == 'Severe' %}severity-severe{% elif assessment.severity == 'Moderate' %}severity-moderate{% elif assessment.severity == 'Mild' %}severity-mild{% else %}severity-none{% endif %}">
+                                {{ assessment.get_severity_display }}
+                            </span>
+                        </div>
+                        <div class="assessment-info">
+                            <span><i class="fas fa-pulse"></i> {{ assessment.get_symptom_count }} Symptoms Detected</span>
+                            <span><i class="fas fa-barcode"></i> Assessment ID: #{{ assessment.id }}</span>
+                        </div>
+                        <a href="{% url 'results' assessment.id %}" class="assessment-action">
+                            <i class="fas fa-external-link-alt"></i> View Full Report
+                        </a>
+                    </div>
+                </div>
                 {% endfor %}
-            </tbody>
-        </table>
+            </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <h3>No Assessment History</h3>
+            <p>Start tracking your mental wellness with your first comprehensive assessment.</p>
+        </div>
+        {% endif %}
     </div>
-    {% else %}
-    <div class="alert alert-info mb-0">
-        <i class="fas fa-info-circle me-2"></i>
-        No assessments yet. Start your first check-in now.
-    </div>
-    {% endif %}
-</section>
+</div>
+
 {% endif %}
 {% endblock %}

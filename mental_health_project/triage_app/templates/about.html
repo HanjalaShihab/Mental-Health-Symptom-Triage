@@ -1,152 +1,410 @@
 {% extends 'base.html' %}
 
-{% block title %}About Mental Health Triage{% endblock %}
+{% block title %}About PsycheSync - Advanced Mental Health Monitoring{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">About Mental Health Symptom Triage</h1>
+<style>
+    .about-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        font-family: 'Roboto Mono', monospace;
+    }
 
-<div class="row">
-    <div class="col-md-8">
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="mb-0">What is This Tool?</h5>
-            </div>
-            <div class="card-body">
-                <p>
-                    The Mental Health Symptom Triage tool is a digital screening application that helps 
-                    individuals assess their mental health symptoms based on established clinical guidelines.
-                </p>
-                <p>
-                    It uses the <strong>WHO mhGAP (Mental Health Gap Action Programme)</strong> framework 
-                    to categorize symptoms and provide preliminary assessments.
-                </p>
-            </div>
+    .about-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid #00ff88;
+    }
+
+    .about-header h1 {
+        font-family: 'DM Serif Display', serif;
+        font-size: 3rem;
+        font-weight: 400;
+        color: #00ff88;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.5rem;
+    }
+
+    .about-header p {
+        color: #888;
+        font-size: 1.1rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .section-title {
+        font-family: 'DM Serif Display', serif;
+        font-size: 1.8rem;
+        color: #00ff88;
+        margin: 3rem 0 1.5rem 0;
+        padding: 1rem 0;
+        border-left: 4px solid #00ff88;
+        padding-left: 1.5rem;
+        letter-spacing: 0.05em;
+    }
+
+    .section-content {
+        color: #aaa;
+        line-height: 1.8;
+        margin-bottom: 2rem;
+    }
+
+    .section-content p {
+        margin-bottom: 1rem;
+    }
+
+    .section-content ul, .section-content ol {
+        margin-bottom: 1rem;
+        padding-left: 2rem;
+    }
+
+    .section-content li {
+        margin-bottom: 0.5rem;
+        color: #999;
+    }
+
+    .section-content strong {
+        color: #00ff88;
+    }
+
+    .severity-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+
+    .severity-card {
+        background: rgba(0, 20, 10, 0.5);
+        border: 1px solid #333;
+        padding: 1.5rem;
+        border-left: 4px solid #00ff88;
+    }
+
+    .severity-card.crisis {
+        border-left-color: #ff3333;
+    }
+
+    .severity-card.severe {
+        border-left-color: #ff8800;
+    }
+
+    .severity-card.moderate {
+        border-left-color: #ffcc00;
+    }
+
+    .severity-card.mild {
+        border-left-color: #00ccff;
+    }
+
+    .severity-card.none {
+        border-left-color: #00ff88;
+    }
+
+    .severity-card h4 {
+        color: #00ff88;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .severity-card.crisis h4 {
+        color: #ff3333;
+    }
+
+    .severity-card.severe h4 {
+        color: #ff8800;
+    }
+
+    .severity-card.moderate h4 {
+        color: #ffcc00;
+    }
+
+    .severity-card.mild h4 {
+        color: #00ccff;
+    }
+
+    .severity-card p {
+        color: #888;
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    .highlight-box {
+        background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0, 100, 255, 0.05));
+        border: 1px solid #333;
+        border-left: 4px solid #ff3333;
+        padding: 2rem;
+        margin: 2rem 0;
+    }
+
+    .highlight-box h4 {
+        color: #ff3333;
+        margin-top: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 1rem;
+    }
+
+    .highlight-box ul {
+        padding-left: 2rem;
+        margin-bottom: 0;
+    }
+
+    .highlight-box li {
+        color: #aaa;
+        margin-bottom: 0.5rem;
+    }
+
+    .framework-list {
+        background: rgba(0, 20, 10, 0.3);
+        border: 1px solid #333;
+        padding: 2rem;
+        margin: 2rem 0;
+    }
+
+    .framework-list h4 {
+        color: #00ff88;
+        margin-top: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 1rem;
+    }
+
+    .framework-list ul {
+        padding-left: 2rem;
+    }
+
+    .framework-list li {
+        color: #999;
+        margin-bottom: 0.5rem;
+    }
+
+    .cta-section {
+        text-align: center;
+        margin: 4rem 0;
+        padding: 2rem;
+        background: rgba(0, 255, 136, 0.05);
+        border: 2px dashed #00ff88;
+    }
+
+    .cta-section h3 {
+        color: #00ff88;
+        font-family: 'DM Serif Display', serif;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        letter-spacing: 0.1em;
+    }
+
+    .cta-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .cta-btn {
+        padding: 0.9rem 2rem;
+        border: 1px solid #00ff88;
+        background: transparent;
+        color: #00ff88;
+        text-decoration: none;
+        font-family: 'Roboto Mono', monospace;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .cta-btn:hover {
+        background: #00ff88;
+        color: #000;
+    }
+
+    .crisis-resources {
+        background: rgba(255, 51, 51, 0.05);
+        border: 1px solid #333;
+        border-left: 4px solid #ff3333;
+        padding: 2rem;
+        margin: 2rem 0;
+    }
+
+    .crisis-resources h4 {
+        color: #ff3333;
+        margin-top: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .crisis-resources ul {
+        padding-left: 2rem;
+    }
+
+    .crisis-resources li {
+        color: #aaa;
+        margin-bottom: 0.8rem;
+    }
+
+    .breadcrumb-nav {
+        color: #888;
+        font-size: 0.9rem;
+        margin-bottom: 2rem;
+    }
+
+    .breadcrumb-nav a {
+        color: #00ff88;
+        text-decoration: none;
+    }
+
+    .breadcrumb-nav a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        .about-header h1 {
+            font-size: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+        }
+
+        .cta-buttons {
+            flex-direction: column;
+        }
+
+        .severity-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="about-container">
+    <div class="breadcrumb-nav">
+        <a href="{% url 'index' %}">Home</a> > <span style="color: #888;">About</span>
+    </div>
+
+    <div class="about-header">
+        <h1>PsycheSync</h1>
+        <p>Advanced Mental Health Monitoring Platform Powered by Clinical Insights</p>
+    </div>
+
+    <h2 class="section-title"><i class="fas fa-info-circle"></i> What Is This?</h2>
+    <div class="section-content">
+        <p>
+            PsycheSync is a digital mental health monitoring platform that helps individuals assess and track their mental health symptoms using evidence-based clinical guidelines. Our system provides preliminary screening assessments that empower users to understand their mental wellness status and take informed action.
+        </p>
+        <p>
+            Built on the <strong>WHO mhGAP (Mental Health Gap Action Programme)</strong> framework, PsycheSync combines clinical assessment methodologies with accessible digital technology to make mental health screening available to everyone, anywhere.
+        </p>
+    </div>
+
+    <h2 class="section-title"><i class="fas fa-cog"></i> How It Works</h2>
+    <div class="section-content">
+        <ol>
+            <li><strong>Assessment:</strong> Answer 20 carefully crafted clinical questions about your mental health</li>
+            <li><strong>Processing:</strong> Our system analyzes your responses using evidence-based algorithms</li>
+            <li><strong>Analysis:</strong> Receive severity classification and personalized insights</li>
+            <li><strong>Action:</strong> Get clear recommendations and resources for next steps</li>
+            <li><strong>Tracking:</strong> Monitor your wellness over time with historical data</li>
+        </ol>
+    </div>
+
+    <h2 class="section-title"><i class="fas fa-chart-line"></i> Severity Levels</h2>
+    <div class="severity-grid">
+        <div class="severity-card none">
+            <h4>✅ No Concerns</h4>
+            <p>Minimal or no symptoms detected. Continue healthy wellness practices.</p>
         </div>
-
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="mb-0">How Does It Work?</h5>
-            </div>
-            <div class="card-body">
-                <ol>
-                    <li><strong>Assessment:</strong> You answer 20 carefully selected questions about your mental health symptoms</li>
-                    <li><strong>Analysis:</strong> The system analyzes your responses using clinical guidelines</li>
-                    <li><strong>Results:</strong> You receive a severity classification and personalized recommendations</li>
-                    <li><strong>Resources:</strong> The tool provides guidance on next steps and helpful resources</li>
-                </ol>
-            </div>
+        <div class="severity-card mild">
+            <h4>🟢 Mild</h4>
+            <p>Some symptoms present. Consider regular self-care and check-ins.</p>
         </div>
-
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="mb-0">Severity Levels</h5>
-            </div>
-            <div class="card-body">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <h6>✅ <strong>No Significant Concerns</strong></h6>
-                        <p class="small text-muted">Minimal or no symptoms detected. Maintain healthy routines.</p>
-                    </div>
-                    <div class="col-md-6">
-                        <h6>🟢 <strong>Mild Concerns</strong></h6>
-                        <p class="small text-muted">Some symptoms present. Consider counseling if they persist.</p>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <h6>🟡 <strong>Moderate Concerns</strong></h6>
-                        <p class="small text-muted">Multiple symptoms affecting daily life. Professional help recommended.</p>
-                    </div>
-                    <div class="col-md-6">
-                        <h6>🔴 <strong>Severe Concerns</strong></h6>
-                        <p class="small text-muted">Significant symptoms. Urgent professional help needed.</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6>🚨 <strong>Immediate Crisis</strong></h6>
-                        <p class="small text-muted">Acute risk. Emergency services needed immediately.</p>
-                    </div>
-                </div>
-            </div>
+        <div class="severity-card moderate">
+            <h4>🟡 Moderate</h4>
+            <p>Multiple symptoms affecting daily life. Professional support recommended.</p>
         </div>
-
-        <div class="card mb-4 border-warning">
-            <div class="card-header bg-light">
-                <h5 class="mb-0">⚠️ Important Disclaimer</h5>
-            </div>
-            <div class="card-body">
-                <ul class="mb-0">
-                    <li>This tool provides <strong>preliminary screening only</strong></li>
-                    <li>It is <strong>NOT a diagnosis</strong> or substitute for professional assessment</li>
-                    <li>Cannot replace care from qualified mental health professionals</li>
-                    <li>Results should be discussed with a healthcare provider</li>
-                    <li>If in crisis, <strong>seek immediate professional help</strong></li>
-                </ul>
-            </div>
+        <div class="severity-card severe">
+            <h4>🔴 Severe</h4>
+            <p>Significant symptoms requiring immediate attention. Urgent professional help needed.</p>
         </div>
-
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="mb-0">Clinical Framework</h5>
-            </div>
-            <div class="card-body">
-                <p>
-                    This tool is based on the <strong>WHO mhGAP guidelines</strong>, which provide evidence-based 
-                    recommendations for the assessment and management of mental, neurological, and substance use disorders.
-                </p>
-                <p>
-                    The questions cover symptoms associated with:
-                </p>
-                <ul>
-                    <li>Depression and mood disorders</li>
-                    <li>Anxiety disorders and panic</li>
-                    <li>Psychotic symptoms</li>
-                    <li>Risk of self-harm</li>
-                    <li>Substance use patterns</li>
-                    <li>Cognitive and behavioral changes</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="mb-0">Privacy & Data</h5>
-            </div>
-            <div class="card-body">
-                <p>
-                    Your assessment data is stored locally and used only to provide you with personalized results 
-                    and recommendations. We do not share your information with third parties.
-                </p>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">Get Help</h5>
-            </div>
-            <div class="card-body">
-                <p><strong>If you're in crisis or experiencing thoughts of self-harm:</strong></p>
-                <ul>
-                    <li>📞 <strong>Emergency Services:</strong> Call 999 (UK) or 112 (EU)</li>
-                    <li>💬 <strong>Crisis Text Line:</strong> Text to a designated crisis line</li>
-                    <li>🏥 <strong>Emergency Room:</strong> Go to your nearest hospital</li>
-                    <li>👨‍⚕️ <strong>Talk to Someone:</strong> Reach out to a trusted friend, family member, or professional</li>
-                </ul>
-            </div>
+        <div class="severity-card crisis">
+            <h4>🚨 Crisis</h4>
+            <p>Acute risk state. Emergency services and immediate intervention required.</p>
         </div>
     </div>
 
-    <div class="col-md-4">
-        <div class="card bg-light sticky-top" style="top: 20px;">
-            <div class="card-body">
-                <h5 class="card-title">Quick Actions</h5>
-                <div class="d-grid gap-2">
-                    <a href="{% url 'assessment' %}" class="btn btn-primary">Start Assessment</a>
-                    <a href="{% url 'history' %}" class="btn btn-outline-secondary">View History</a>
-                </div>
-            </div>
+    <h2 class="section-title"><i class="fas fa-flask"></i> Clinical Framework</h2>
+    <div class="section-content">
+        <p>
+            PsycheSync is built on rigorously tested clinical assessment methodologies. Our questionnaire covers:
+        </p>
+    </div>
+    <div class="framework-list">
+        <h4>Assessment Domains:</h4>
+        <ul>
+            <li>Depression and mood disorders</li>
+            <li>Anxiety and panic disorders</li>
+            <li>Psychotic symptoms and delusions</li>
+            <li>Risk of self-harm and suicidal ideation</li>
+            <li>Substance use patterns</li>
+            <li>Cognitive and behavioral changes</li>
+            <li>Sleep and appetite disruptions</li>
+            <li>Functional impairment assessment</li>
+        </ul>
+    </div>
+
+    <h2 class="section-title"><i class="fas fa-warning"></i> Important Disclaimer</h2>
+    <div class="highlight-box">
+        <h4>⚠️ Critical Information</h4>
+        <ul>
+            <li>This tool provides <strong>preliminary screening only</strong></li>
+            <li>Results are <strong>NOT a diagnosis</strong></li>
+            <li>Cannot replace professional mental health evaluation</li>
+            <li>Should not be used as sole basis for treatment decisions</li>
+            <li>Always consult with qualified healthcare providers</li>
+            <li>In emergency situations, seek immediate professional help</li>
+        </ul>
+    </div>
+
+    <h2 class="section-title"><i class="fas fa-lock"></i> Privacy & Security</h2>
+    <div class="section-content">
+        <p>
+            <strong>Your privacy is paramount:</strong>
+        </p>
+        <ul>
+            <li>All assessment data is encrypted and stored securely</li>
+            <li>Your information is <strong>never</strong> shared with third parties</li>
+            <li>You maintain complete control over your data</li>
+            <li>Compliance with international data protection standards</li>
+            <li>Regular security audits and updates</li>
+        </ul>
+    </div>
+
+    <h2 class="section-title"><i class="fas fa-phone"></i> Crisis Resources</h2>
+    <div class="crisis-resources">
+        <h4>🆘 If You're In Crisis</h4>
+        <ul>
+            <li><strong>📞 Emergency Services:</strong> Call 999 (UK) or 112 (EU) or 911 (US)</li>
+            <li><strong>💬 Crisis Text Line:</strong> Text your area's crisis line</li>
+            <li><strong>🌐 988 Suicide & Crisis Lifeline (US):</strong> Call or text 988</li>
+            <li><strong>🏥 Emergency Room:</strong> Go to your nearest hospital immediately</li>
+            <li><strong>👥 Trusted Support:</strong> Contact a friend, family member, or mental health professional</li>
+            <li><strong>🌍 International:</strong> befrienders.org - Find helplines worldwide</li>
+        </ul>
+    </div>
+
+    <div class="cta-section">
+        <h3>Ready to Monitor Your Mental Wellness?</h3>
+        <div class="cta-buttons">
+            <a href="{% url 'assessment' %}" class="cta-btn">Start Assessment</a>
+            <a href="{% url 'history' %}" class="cta-btn">View History</a>
+            <a href="{% url 'login' %}" class="cta-btn">Login</a>
         </div>
     </div>
 </div>
+
 {% endblock %}
