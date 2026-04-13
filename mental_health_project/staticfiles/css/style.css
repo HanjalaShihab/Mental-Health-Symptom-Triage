@@ -10,8 +10,8 @@
     --danger-color: #ee5a6f;
     --light-color: #f8f9fa;
     --dark-color: #1a202c;
-    --text-color: #e2e8f0;
-    --border-color: #4a5568;
+    --text-color: #2d3748;
+    --border-color: #e2e8f0;
     --divider-thickness: 2px;
 }
 
@@ -91,16 +91,13 @@
     border-radius: 10px;
     padding: 0.75rem 1rem;
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    background-color: #2d3748;
+    background-color: #f7f9fc;
     font-size: 1rem;
-    color: #e2e8f0 !important;
 }
 
 .form-control:focus, .form-select:focus {
     border-color: var(--primary-color);
-    background-color: #374151;
-    color: #e2e8f0 !important;
-}
+    background-color: white;
     box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
     outline: none;
 }
@@ -148,7 +145,7 @@
     cursor: pointer;
     margin-left: 0.5rem;
     font-weight: 500;
-    color: #e2e8f0 !important;
+    color: var(--text-color);
 }
 
 /* Symptom Checklist */
@@ -199,25 +196,25 @@
 .alert-info {
     background-color: rgba(102, 126, 234, 0.1);
     border-left-color: var(--primary-color);
-    color: #93bbff;
+    color: var(--primary-color);
 }
 
 .alert-warning {
     background-color: rgba(247, 183, 49, 0.1);
     border-left-color: var(--warning-color);
-    color: #ffd700;
+    color: #b8860b;
 }
 
 .alert-danger {
     background-color: rgba(238, 90, 111, 0.1);
     border-left-color: var(--danger-color);
-    color: #ff6b7a;
+    color: #c41e3a;
 }
 
 .alert-success {
     background-color: rgba(38, 208, 206, 0.1);
     border-left-color: var(--success-color);
-    color: #26d0ce;
+    color: #117a6b;
 }
 
 /* ===== BUTTONS ===== */
@@ -350,19 +347,7 @@
     border: none;
     padding: 0 0 1.5rem 2rem;
     font-weight: 700;
-    color: #e2e8f0 !important;
-}
-
-.card-body {
-    padding: 0 0 0 2rem;
-}
-
-.card-title {
-    color: #e2e8f0 !important;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    font-size: 1.3rem;
-}
+    color: var(--text-color);
     font-size: 1.3rem;
 }
 
@@ -391,7 +376,7 @@
 
 .results-card h3 {
     font-weight: 700;
-    color: #e2e8f0 !important;
+    color: var(--text-color);
     margin-bottom: 1.5rem;
 }
 
@@ -452,7 +437,7 @@
     border: none;
     border-bottom: 3px solid var(--primary-color);
     font-weight: 700;
-    color: #e2e8f0 !important;
+    color: var(--text-color);
     padding: 1rem 1.25rem 0.75rem 1.25rem;
     text-transform: uppercase;
     font-size: 0.85rem;
@@ -479,7 +464,6 @@
     padding: 1rem 1.25rem;
     vertical-align: middle;
     border: none;
-    color: #cbd5e0 !important;
 }
 
 /* ===== LIST GROUPS (No Cards) ===== */
@@ -490,7 +474,6 @@
     border-left: 3px solid transparent;
     padding: 1.5rem 0 1.5rem 1.5rem;
     transition: all 0.3s ease;
-    color: #cbd5e0 !important;
 }
 
 .list-group-item:first-child {
@@ -582,27 +565,6 @@ footer p, footer a {
 
 footer a:hover {
     color: var(--primary-color);
-}
-
-/* ===== TEXT COLOR FIXES FOR DARK THEME ===== */
-.text-muted {
-    color: #a0aec0 !important;
-}
-
-.lead {
-    color: #cbd5e0 !important;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    color: #e2e8f0 !important;
-}
-
-p {
-    color: #cbd5e0 !important;
-}
-
-strong, .fw-bold {
-    color: #f7fafc !important;
 }
 
 /* ===== RESPONSIVE ===== */

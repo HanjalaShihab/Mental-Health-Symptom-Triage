@@ -1,184 +1,342 @@
 {% extends 'base.html' %}
 
-{% block title %}Mental Health Assessment{% endblock %}
+{% block title %}Mental Health Assessment - PsycheSync{% endblock %}
 
 {% block content %}
-<!-- Header -->
-<div class="mb-5">
-    <h1 class="display-5 fw-bold mb-3">
-        <i class="fas fa-heart-pulse"></i> Mental Health Assessment
-    </h1>
-    <p class="lead text-muted">
-        A comprehensive evaluation based on WHO mhGAP guidelines. This typically takes 5-10 minutes.
-    </p>
-</div>
-
-<!-- Important Alert -->
-<div class="alert alert-info border-0 mb-5" style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); border-left: 4px solid var(--primary-color); border-radius: 0;">
-    <div class="d-flex align-items-start gap-3">
-        <i class="fas fa-info-circle fs-5" style="color: var(--primary-color); flex-shrink: 0; margin-top: 0.25rem;"></i>
-        <div>
-            <strong>📋 Please Answer Honestly</strong>
-            <p class="mb-0 small mt-1">Your responses are completely confidential. This assessment is designed to help you understand your mental health better. It's not a diagnosis.</p>
-        </div>
-    </div>
-</div>
-
-<form method="post" class="needs-validation" novalidate>
-    {% csrf_token %}
-    
-    <div class="row">
-        <div class="col-lg-10 mx-auto">
-            <!-- Mood & Emotion Section -->
-            <div class="assessment-section" style="padding-left: 2rem; border-left: 4px solid var(--primary-color); margin-bottom: 3rem; padding-bottom: 2.5rem; border-bottom: 2px solid var(--border-color);">
-                <h5 class="mb-4" style="color: var(--text-color); font-size: 1.3rem; font-weight: 700;">
-                    <i class="fas fa-face-smile" style="color: var(--primary-color); margin-right: 0.5rem;"></i> Mood & Emotions
-                </h5>
-                {% for field in form %}
-                    {% if field.name in 'sadness,loss_interest,worthlessness,hopelessness,irritability,mood_swings' %}
-                        <div class="form-check mb-3" style="padding: 0.75rem 0;">
-                            <div class="d-flex gap-3">
-                                {{ field }}
-                                <div class="flex-grow-1">
-                                    <label class="form-check-label fw-500" for="{{ field.id_for_label }}">
-                                        {{ field.label }}
-                                    </label>
-                                    {% if field.help_text %}
-                                        <p class="small text-muted mb-0 mt-1">{{ field.help_text|safe }}</p>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-
-            <!-- Sleep & Energy Section -->
-            <div class="assessment-section" style="padding-left: 2rem; border-left: 4px solid var(--secondary-color); margin-bottom: 3rem; padding-bottom: 2.5rem; border-bottom: 2px solid var(--border-color);">
-                <h5 class="mb-4" style="color: var(--text-color); font-size: 1.3rem; font-weight: 700;">
-                    <i class="fas fa-moon" style="color: var(--secondary-color); margin-right: 0.5rem;"></i> Sleep & Energy
-                </h5>
-                {% for field in form %}
-                    {% if field.name in 'sleep_issues,appetite_changes,fatigue' %}
-                        <div class="form-check mb-3" style="padding: 0.75rem 0;">
-                            <div class="d-flex gap-3">
-                                {{ field }}
-                                <div class="flex-grow-1">
-                                    <label class="form-check-label fw-500" for="{{ field.id_for_label }}">
-                                        {{ field.label }}
-                                    </label>
-                                    {% if field.help_text %}
-                                        <p class="small text-muted mb-0 mt-1">{{ field.help_text|safe }}</p>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-
-            <!-- Anxiety Section -->
-            <div class="assessment-section" style="padding-left: 2rem; border-left: 4px solid var(--success-color); margin-bottom: 3rem; padding-bottom: 2.5rem; border-bottom: 2px solid var(--border-color);">
-                <h5 class="mb-4" style="color: var(--text-color); font-size: 1.3rem; font-weight: 700;">
-                    <i class="fas fa-bolt" style="color: var(--success-color); margin-right: 0.5rem;"></i> Anxiety & Worry
-                </h5>
-                {% for field in form %}
-                    {% if field.name in 'anxiety,panic,worry,concentration_issues' %}
-                        <div class="form-check mb-3" style="padding: 0.75rem 0;">
-                            <div class="d-flex gap-3">
-                                {{ field }}
-                                <div class="flex-grow-1">
-                                    <label class="form-check-label fw-500" for="{{ field.id_for_label }}">
-                                        {{ field.label }}
-                                    </label>
-                                    {% if field.help_text %}
-                                        <p class="small text-muted mb-0 mt-1">{{ field.help_text|safe }}</p>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-
-            <!-- Physical & Behavioral Section -->
-            <div class="assessment-section" style="padding-left: 2rem; border-left: 4px solid var(--warning-color); margin-bottom: 3rem; padding-bottom: 2.5rem; border-bottom: 2px solid var(--border-color);">
-                <h5 class="mb-4" style="color: var(--text-color); font-size: 1.3rem; font-weight: 700;">
-                    <i class="fas fa-dumbbell" style="color: var(--warning-color); margin-right: 0.5rem;"></i> Physical & Behavioral
-                </h5>
-                {% for field in form %}
-                    {% if field.name in 'physical_pain,substance_use,reckless_behavior' %}
-                        <div class="form-check mb-3" style="padding: 0.75rem 0;">
-                            <div class="d-flex gap-3">
-                                {{ field }}
-                                <div class="flex-grow-1">
-                                    <label class="form-check-label fw-500" for="{{ field.id_for_label }}">
-                                        {{ field.label }}
-                                    </label>
-                                    {% if field.help_text %}
-                                        <p class="small text-muted mb-0 mt-1">{{ field.help_text|safe }}</p>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-
-            <!-- Safety & Self-Harm Section (Critical) -->
-            <div class="assessment-section" style="padding-left: 2rem; border-left: 4px solid var(--danger-color); margin-bottom: 3rem; padding-bottom: 2.5rem;">
-                <h5 class="mb-2" style="color: var(--text-color); font-size: 1.3rem; font-weight: 700;">
-                    <i class="fas fa-exclamation-triangle" style="color: var(--danger-color); margin-right: 0.5rem;"></i> Safety & Well-Being
-                </h5>
-                <small class="text-danger" style="display: block; margin-bottom: 1.5rem;">⚠️ Your responses here are important for your safety</small>
-                {% for field in form %}
-                    {% if field.name in 'self_harm_thoughts,self_harm_behavior,suicide_thoughts' %}
-                        <div class="form-check mb-3" style="padding: 0.75rem 0;">
-                            <div class="d-flex gap-3">
-                                {{ field }}
-                                <div class="flex-grow-1">
-                                    <label class="form-check-label fw-500" for="{{ field.id_for_label }}">
-                                        {{ field.label }}
-                                    </label>
-                                    {% if field.help_text %}
-                                        <p class="small text-danger mb-0 mt-1"><strong>{{ field.help_text|safe }}</strong></p>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-
-            <!-- Submit Buttons -->
-            <div class="d-grid gap-3 d-sm-flex justify-content-center mb-4 pt-3">
-                <button type="submit" class="btn btn-primary btn-lg" style="min-width: 200px;">
-                    <i class="fas fa-check-circle"></i> Complete Assessment
-                </button>
-                <a href="{% url 'index' %}" class="btn btn-outline-primary btn-lg">
-                    <i class="fas fa-times-circle"></i> Cancel
-                </a>
-            </div>
-        </div>
-    </div>
-</form>
-
 <style>
-    .fw-500 {
-        font-weight: 500;
+    .assessment-container {
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 0 1rem;
     }
-    
-    .assessment-section {
-        animation: slideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    .assessment-header {
+        margin-bottom: 3rem;
+    }
+
+    .assessment-title {
+        font-family: 'DM Serif Display', serif;
+        font-size: 2.5rem;
+        font-weight: 400;
+        color: #00ff88;
+        margin-bottom: 0.5rem;
+        letter-spacing: 0.05em;
+    }
+
+    .assessment-subtitle {
+        color: #888;
+        font-family: 'Roboto Mono', monospace;
+        font-size: 0.9rem;
+    }
+
+    .alert-info {
+        background: rgba(0, 204, 255, 0.1);
+        border-left: 4px solid #00ccff;
+        border-radius: 0;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .alert-info-title {
+        color: #00ccff;
+        font-family: 'Roboto Mono', monospace;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .alert-info-text {
+        color: #fff;
+        font-family: 'Roboto Mono', monospace;
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    .section-group {
+        margin-bottom: 3rem;
+    }
+
+    .section-title {
+        font-family: 'DM Serif Display', serif;
+        font-size: 1.4rem;
+        font-weight: 400;
+        color: #00ff88;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #00ff88;
+        letter-spacing: 0.05em;
+    }
+
+    .section-title i {
+        margin-right: 0.5rem;
+        color: #00ff88;
+    }
+
+    .form-check {
+        padding: 1rem;
+        background: rgba(15, 15, 15, 0.6);
+        border: 1px solid #333;
+        margin-bottom: 0.75rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-check:hover {
+        border-color: #00ff88;
+        background: rgba(0, 255, 136, 0.05);
+    }
+
+    .form-check input[type="checkbox"],
+    .form-check input[type="radio"] {
+        accent-color: #00ff88;
+        cursor: pointer;
+        margin-right: 1rem;
+    }
+
+    .form-check-label {
+        color: #fff;
+        font-family: 'Roboto Mono', monospace;
+        font-weight: 500;
+        cursor: pointer;
+        margin: 0;
+    }
+
+    .form-check-help {
+        color: #ccc;
+        font-family: 'Roboto Mono', monospace;
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+        margin-left: 0;
+        line-height: 1.4;
+    }
+
+    .button-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    @media (max-width: 576px) {
+        .button-group {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #00ff88 0%, #00cc66 100%);
+        border: none;
+        color: #000;
+        font-family: 'Roboto Mono', monospace;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem;
+        border-radius: 0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-submit:hover {
+        background: linear-gradient(135deg, #00ffaa 0%, #00dd77 100%);
+        box-shadow: 0 0 25px rgba(0, 255, 136, 0.5);
+        color: #000;
+    }
+
+    .btn-cancel {
+        background: transparent;
+        border: 2px solid #666;
+        color: #fff;
+        font-family: 'Roboto Mono', monospace;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 1rem;
+        border-radius: 0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-cancel:hover {
+        border-color: #fff;
+        color: #fff;
     }
 </style>
+
+<div class="assessment-container">
+    <!-- Header -->
+    <div class="assessment-header">
+        <h1 class="assessment-title">
+            <i class="fas fa-heart-pulse"></i> Mental Health Assessment
+        </h1>
+        <p class="assessment-subtitle">
+            WHO mhGAP Framework • Estimated Time: 5-10 minutes
+        </p>
+    </div>
+
+    <!-- Important Alert -->
+    <div class="alert-info">
+        <div class="alert-info-title">
+            <i class="fas fa-info-circle"></i> Please Answer Honestly
+        </div>
+        <p class="alert-info-text">
+            Your responses are completely confidential and encrypted. This assessment helps you understand your mental health better. It's not a clinical diagnosis.
+        </p>
+    </div>
+
+    <!-- Assessment Form -->
+    <form method="post" novalidate>
+        {% csrf_token %}
+        
+        <!-- Mood & Emotion Section -->
+        <div class="section-group">
+            <h5 class="section-title">
+                <i class="fas fa-face-smile"></i> Mood & Emotions
+            </h5>
+            {% for field in form %}
+                {% if field.name|stringformat:'s' in 'sadness,loss_interest,worthlessness,hopelessness,irritability,mood_swings' %}
+                    <div class="form-check">
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            {{ field }}
+                            <div style="flex-grow: 1;">
+                                <label class="form-check-label" for="{{ field.id_for_label }}">
+                                    {{ field.label }}
+                                </label>
+                                {% if field.help_text %}
+                                    <p class="form-check-help">{{ field.help_text|safe }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <!-- Sleep & Energy Section -->
+        <div class="section-group">
+            <h5 class="section-title">
+                <i class="fas fa-moon"></i> Sleep & Energy
+            </h5>
+            {% for field in form %}
+                {% if field.name|stringformat:'s' in 'sleep_issues,appetite_changes,fatigue' %}
+                    <div class="form-check">
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            {{ field }}
+                            <div style="flex-grow: 1;">
+                                <label class="form-check-label" for="{{ field.id_for_label }}">
+                                    {{ field.label }}
+                                </label>
+                                {% if field.help_text %}
+                                    <p class="form-check-help">{{ field.help_text|safe }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <!-- Anxiety Section -->
+        <div class="section-group">
+            <h5 class="section-title">
+                <i class="fas fa-bolt"></i> Anxiety & Worry
+            </h5>
+            {% for field in form %}
+                {% if field.name|stringformat:'s' in 'anxiety,panic,worry,concentration_issues' %}
+                    <div class="form-check">
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            {{ field }}
+                            <div style="flex-grow: 1;">
+                                <label class="form-check-label" for="{{ field.id_for_label }}">
+                                    {{ field.label }}
+                                </label>
+                                {% if field.help_text %}
+                                    <p class="form-check-help">{{ field.help_text|safe }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <!-- Physical & Behavioral Section -->
+        <div class="section-group">
+            <h5 class="section-title">
+                <i class="fas fa-dumbbell"></i> Physical & Behavioral
+            </h5>
+            {% for field in form %}
+                {% if field.name|stringformat:'s' in 'physical_pain,substance_use,reckless_behavior' %}
+                    <div class="form-check">
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            {{ field }}
+                            <div style="flex-grow: 1;">
+                                <label class="form-check-label" for="{{ field.id_for_label }}">
+                                    {{ field.label }}
+                                </label>
+                                {% if field.help_text %}
+                                    <p class="form-check-help">{{ field.help_text|safe }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <!-- Safety & Self-Harm Section (Critical) -->
+        <div class="section-group">
+            <h5 class="section-title" style="border-bottom-color: #ff3333; color: #ff3333;">
+                <i class="fas fa-exclamation-triangle"></i> Safety & Well-Being
+            </h5>
+            <div style="background: rgba(255, 51, 51, 0.05); border-left: 4px solid #ff3333; padding: 1rem; margin-bottom: 1rem;">
+                <p style="color: #ff3333; font-family: 'Roboto Mono', monospace; font-size: 0.9rem; margin: 0;">
+                    ⚠️ Your responses here are important for your safety and care
+                </p>
+            </div>
+            
+            {% for field in form %}
+                {% if field.name|stringformat:'s' in 'self_harm_thoughts,self_harm_behavior,suicide_thoughts' %}
+                    <div class="form-check" style="border-left: 2px solid #ff3333;">
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            {{ field }}
+                            <div style="flex-grow: 1;">
+                                <label class="form-check-label" for="{{ field.id_for_label }}">
+                                    {{ field.label }}
+                                </label>
+                                {% if field.help_text %}
+                                    <p class="form-check-help" style="color: #ff3333; font-weight: 600;">{{ field.help_text|safe }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <!-- Submit Buttons -->
+        <div class="button-group">
+            <button type="submit" class="btn-submit">
+                <i class="fas fa-check-circle"></i> Complete Assessment
+            </button>
+            <a href="{% url 'index' %}" class="btn-cancel">
+                <i class="fas fa-times-circle"></i> Cancel
+            </a>
+        </div>
+    </form>
+</div>
 
 <script>
     // Form validation
     (function () {
         'use strict';
         window.addEventListener('load', function () {
-            var forms = document.querySelectorAll('.needs-validation');
+            var forms = document.querySelectorAll('form');
             Array.prototype.slice.call(forms)
                 .forEach(function (form) {
                     form.addEventListener('submit', function (event) {
@@ -186,9 +344,9 @@
                             event.preventDefault();
                             event.stopPropagation();
                         }
-                        form.classList.add('was-validated');
                     }, false);
                 });
         }, false);
     }());
 </script>
+{% endblock %}
