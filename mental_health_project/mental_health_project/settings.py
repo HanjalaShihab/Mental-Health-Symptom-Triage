@@ -4,6 +4,7 @@ Django settings for mental_health_project project.
 
 from pathlib import Path
 import os
+from urllib.parse import urlparse
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -16,7 +17,10 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-mental-health-triage-dev-k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+allowed_hosts = [h.strip() for h in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if h.strip()]
+if os.getenv('VERCEL') == '1':
+    allowed_hosts.extend(['.vercel.app'])
+ALLOWED_HOSTS = list(dict.fromkeys(allowed_hosts))
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -78,12 +82,25 @@ DATABASES = {
     }
 }
 
-# Support for Vercel environment
-if os.getenv('VERCEL'):
+database_url = os.getenv('DATABASE_URL')
+if database_url:
+    parsed_url = urlparse(database_url)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': parsed_url.path.lstrip('/'),
+            'USER': parsed_url.username or '',
+            'PASSWORD': parsed_url.password or '',
+            'HOST': parsed_url.hostname or '',
+            'PORT': str(parsed_url.port or 5432),
+            'CONN_MAX_AGE': 600,
+        }
+    }
+elif os.getenv('VERCEL'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': '/tmp/db.sqlite3',  # Vercel uses ephemeral storage
+            'NAME': '/tmp/db.sqlite3',  # Vercel uses ephemeral storage when no persistent DB is configured
         }
     }
 

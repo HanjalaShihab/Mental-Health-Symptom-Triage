@@ -127,6 +127,31 @@
         color: #666;
     }
 
+    .password-wrapper {
+        position: relative;
+    }
+
+    .password-toggle {
+        position: absolute;
+        top: 50%;
+        right: 0.85rem;
+        transform: translateY(-50%);
+        background: transparent;
+        border: 0;
+        color: #000;
+        padding: 0;
+        cursor: pointer;
+        line-height: 1;
+    }
+
+    .password-toggle:hover {
+        color: #c00;
+    }
+
+    .password-toggle.is-visible {
+        color: #c00;
+    }
+
     .form-control::-webkit-input-placeholder {
         color: #666;
     }
@@ -265,7 +290,12 @@
 
             <div class="form-group">
                 <label class="form-label">Password</label>
-                <input type="password" name="password" class="form-control" placeholder="Enter password" required>
+                <div class="password-wrapper">
+                    <input type="password" name="password" id="login-password" class="form-control" placeholder="Enter password" required>
+                    <button type="button" class="password-toggle" data-target="login-password" aria-label="Show password">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
                 {% if form.password.errors %}
                     {% for error in form.password.errors %}
                         <div class="error-text"><i class="fas fa-exclamation-circle"></i> {{ error }}</div>
@@ -292,4 +322,22 @@
         <a href="{% url 'index' %}"><i class="fas fa-arrow-left"></i> Back to Home</a>
     </div>
 </div>
+<script>
+    document.querySelectorAll('.password-toggle').forEach(function(button) {
+        button.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const input = document.getElementById(targetId);
+            const icon = this.querySelector('i');
+
+            if (!input || !icon) return;
+
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+            button.classList.toggle('is-visible', isPassword);
+            this.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+        });
+    });
+</script>
 {% endblock %}

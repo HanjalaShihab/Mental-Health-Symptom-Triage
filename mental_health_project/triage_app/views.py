@@ -6,21 +6,23 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import Assessment, UserProfile
 from .forms import AssessmentForm, SelfHarmFollowupForm, RegistrationForm, LoginForm
-import sys
-import os
+from .rules import determine_severity
 
-# Add parent directory to path to import backend modules
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-
-from rules import determine_severity
-from ml_model import MentalHealthMLPredictor
+# ML model is optional in cloud deployments where the file may be unavailable.
+try:
+    from ml_model import MentalHealthMLPredictor
+except Exception:
+    MentalHealthMLPredictor = None
 
 # Initialize ML predictor
-try:
-    ml_predictor = MentalHealthMLPredictor()
-    ml_enabled = ml_predictor.load_model()
-except:
-    ml_enabled = False
+ml_predictor = None
+ml_enabled = False
+if MentalHealthMLPredictor:
+    try:
+        ml_predictor = MentalHealthMLPredictor()
+        ml_enabled = ml_predictor.load_model()
+    except Exception:
+        ml_enabled = False
 
 
 # ============ Authentication Views ============

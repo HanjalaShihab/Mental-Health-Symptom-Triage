@@ -13,6 +13,7 @@ Set these in your Vercel project settings (`Settings > Environment Variables`):
 SECRET_KEY=your-secure-secret-key-here
 DEBUG=False
 ALLOWED_HOSTS=yourdomain.vercel.app,yourdomains.com
+DATABASE_URL=your-postgres-connection-string
 GOOGLE_CLIENT_ID=your-google-client-id
 GOOGLE_CLIENT_SECRET=your-google-client-secret
 VERCEL=1
@@ -55,11 +56,11 @@ Click "Deploy" to build and deploy your application
 ## Post-Deployment
 
 ### Run Database Migrations
-Vercel uses ephemeral storage, so SQLite data is not persistent. For production, you'll need to:
+The app now supports persistent PostgreSQL when `DATABASE_URL` is set.
 
-1. Use a managed PostgreSQL database (e.g., from Vercel or AWS RDS)
-2. Update `DATABASE_URL` environment variable
-3. Connect Vercel to your database
+1. Use a managed PostgreSQL database (for example Vercel Postgres, Neon, Supabase, or AWS RDS)
+2. Add the connection string to `DATABASE_URL`
+3. Redeploy so migrations run during the Vercel build step
 
 ### Update Google OAuth Redirect URIs
 1. Go to Google Cloud Console
