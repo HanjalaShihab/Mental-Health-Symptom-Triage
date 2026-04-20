@@ -1,1 +1,5 @@
-.vercel
+.vercel/
+venv/
+staticfiles/
+__pycache__/
+*.py[cod]

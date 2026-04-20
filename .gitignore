@@ -11,3 +11,7 @@ yarn-error.log*
 .vscode/
 .idea/
 __pycache__/
+*.py[cod]
+venv/
+mental_health_project/venv/
+mental_health_project/staticfiles/
